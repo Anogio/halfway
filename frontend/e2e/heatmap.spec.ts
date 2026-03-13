@@ -4,6 +4,49 @@ const ENGLISH_APP_ROUTE = "/?skipOnboarding=1&lang=en&city=paris_fr";
 const ENGLISH_ROUTE_NO_CITY = "/?lang=en";
 
 test.describe("Halfway app", () => {
+  test("keeps the document pinned to the viewport through mobile onboarding", async ({ page }) => {
+    await page.goto(ENGLISH_ROUTE_NO_CITY);
+
+    await expect(page.getByRole("dialog", { name: "Choose your city" })).toBeVisible();
+
+    const cityGateMetrics = await page.evaluate(() => {
+      const scrollingElement = document.scrollingElement;
+      const cityGateCard = document.querySelector(".city-gate-card")?.getBoundingClientRect();
+      return {
+        innerHeight: window.innerHeight,
+        scrollHeight: scrollingElement?.scrollHeight ?? 0,
+        cityGateTop: cityGateCard?.top ?? null,
+        cityGateBottom: cityGateCard?.bottom ?? null
+      };
+    });
+
+    expect(cityGateMetrics.scrollHeight).toBeLessThanOrEqual(cityGateMetrics.innerHeight + 1);
+    expect(cityGateMetrics.cityGateTop).not.toBeNull();
+    expect(cityGateMetrics.cityGateBottom).not.toBeNull();
+    expect(cityGateMetrics.cityGateTop!).toBeGreaterThanOrEqual(0);
+    expect(cityGateMetrics.cityGateBottom!).toBeLessThanOrEqual(cityGateMetrics.innerHeight);
+
+    await page.getByTestId("city-gate-option-paris_fr").click();
+    await expect(page.getByRole("dialog", { name: "Initialize meeting points" })).toBeVisible();
+
+    const onboardingMetrics = await page.evaluate(() => {
+      const scrollingElement = document.scrollingElement;
+      const onboardingCard = document.querySelector(".onboarding-card")?.getBoundingClientRect();
+      return {
+        innerHeight: window.innerHeight,
+        scrollHeight: scrollingElement?.scrollHeight ?? 0,
+        onboardingTop: onboardingCard?.top ?? null,
+        onboardingBottom: onboardingCard?.bottom ?? null
+      };
+    });
+
+    expect(onboardingMetrics.scrollHeight).toBeLessThanOrEqual(onboardingMetrics.innerHeight + 1);
+    expect(onboardingMetrics.onboardingTop).not.toBeNull();
+    expect(onboardingMetrics.onboardingBottom).not.toBeNull();
+    expect(onboardingMetrics.onboardingTop!).toBeGreaterThanOrEqual(0);
+    expect(onboardingMetrics.onboardingBottom!).toBeLessThanOrEqual(onboardingMetrics.innerHeight);
+  });
+
   test("shows city gate when no city preset is provided", async ({ page }) => {
     await page.goto(ENGLISH_ROUTE_NO_CITY);
 

@@ -2,6 +2,7 @@
   --fg: #1f2b35;
   --muted: #5f6f7e;
   --accent: #d14f2a;
+  --app-viewport-height: 100dvh;
   --paper-bg: rgba(255, 253, 247, 0.9);
   --paper-border: 1px solid rgba(255, 255, 255, 0.45);
   --shadow-soft: 0 8px 20px rgba(31, 24, 12, 0.16);
@@ -23,17 +24,20 @@ html,
 body {
   margin: 0;
   width: 100%;
-  height: 100%;
+  height: var(--app-viewport-height);
   overflow: hidden;
+  overscroll-behavior: none;
   background: #f3efe5;
   color: var(--fg);
   font-family: "Avenir Next", "Segoe UI", sans-serif;
 }
 
 .map-app {
-  position: relative;
-  width: 100vw;
-  height: 100dvh;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: var(--app-viewport-height);
+  overflow: hidden;
   background: #e8e5dd;
 }
 

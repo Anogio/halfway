@@ -6,11 +6,13 @@ import { smoothFeatureCollection } from "@/lib/heatmapPresentation.mjs";
 import HeatmapViewFrame from "@/components/heatmap/HeatmapViewFrame";
 import { useHeatmapController } from "@/components/heatmap/useHeatmapController";
 import { useMapLibreMap } from "@/components/heatmap/useMapLibreMap";
+import { useViewportHeightCssVar } from "@/components/heatmap/useViewportHeightCssVar";
 import { useI18n } from "@/i18n/useI18n";
 
 export default function HeatmapView() {
   const { messages } = useI18n();
   const controller = useHeatmapController();
+  useViewportHeightCssVar();
 
   const displayFeatureCollection = useMemo(
     () => smoothFeatureCollection(controller.data),
