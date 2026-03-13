@@ -2,6 +2,9 @@
   "name": "transit-frontend",
   "private": true,
   "version": "0.1.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "dev": "next dev",
     "dev:browser-check": "NEXT_PUBLIC_BACKEND_URL=${NEXT_PUBLIC_BACKEND_URL:-http://127.0.0.1:8001} next dev --hostname 127.0.0.1 --port 3010",

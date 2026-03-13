@@ -12,6 +12,7 @@ __pycache__/
 node_modules/
 .next/
 dist/
+*.tsbuildinfo
 
 # Artifacts
 backend/offline/data/interim/

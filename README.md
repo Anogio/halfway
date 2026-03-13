@@ -57,7 +57,7 @@ BASELINE_CITY=paris make baseline
 
 ## Requirements
 - Python 3.13+
-- Node 22+
+- Node 24.x
 - `uv` 0.10+
 
 ## Standard workflow

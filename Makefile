@@ -9,6 +9,11 @@ doctor:
 		(echo "python3 >= 3.13 required, found $$PY_VERSION" && exit 1)
 	@command -v node >/dev/null || (echo "node is required" && exit 1)
 	@command -v npm >/dev/null || (echo "npm is required" && exit 1)
+	@NODE_VERSION=$$(node -v | sed 's/^v//'); \
+	NODE_MAJOR=$$(echo $$NODE_VERSION | cut -d. -f1); \
+	if [ "$$NODE_MAJOR" -ne 24 ]; then \
+		echo "node 24.x required, found v$$NODE_VERSION"; exit 1; \
+	fi
 	@UV_VERSION=$$(uv --version | awk '{print $$2}'); \
 	REQ_MAJOR=0; REQ_MINOR=10; \
 	MAJOR=$$(echo $$UV_VERSION | cut -d. -f1); \
