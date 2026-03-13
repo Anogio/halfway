@@ -1,0 +1,36 @@
+{
+  "health": {
+    "ok": true,
+    "cities": [
+      "paris"
+    ],
+    "cities_count": 1
+  },
+  "metadata": {
+    "cities": [
+      {
+        "id": "paris",
+        "label": "Paris",
+        "default_view": [
+          48.8566,
+          2.3522,
+          12
+        ],
+        "bbox": [
+          1.149856,
+          47.961079,
+          3.560668,
+          49.459332
+        ]
+      }
+    ]
+  },
+  "multi_isochrones_missing_city": 400,
+  "multi_isochrones_unknown_city": 400,
+  "multi_isochrones_paris": 200,
+  "multi_path_paris": 200,
+  "isochrones_removed": 404,
+  "path_removed": 404,
+  "geocode_missing_city": 400,
+  "reverse_geocode_missing_city": 400
+}

@@ -1,0 +1,25 @@
+{
+  "alight_edges": 75697,
+  "boarding_edges": 75697,
+  "city": "paris",
+  "edge_kind_counts": {
+    "alight": 75697,
+    "boarding": 75697,
+    "ride": 74215,
+    "transfer_fallback": 2048,
+    "transfer_gtfs": 181759,
+    "transfer_pathway": 7486
+  },
+  "graph_edges": 416902,
+  "nodes": 111777,
+  "onboard_nodes": 75697,
+  "physical_nodes": 36080,
+  "ride_edges_raw": 74215,
+  "version": "v2",
+  "wait_stats": {
+    "max_wait_s": 600,
+    "mean_wait_s": 473.2309835608805,
+    "min_wait_s": 29,
+    "routes_with_wait": 3589
+  }
+}

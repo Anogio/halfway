@@ -1,0 +1,16 @@
+{
+  "access_fallback_k": 3,
+  "access_limit": 24,
+  "access_radius_m": 800.0,
+  "cell_size_m": 250.0,
+  "cells": 23547,
+  "city": "madrid",
+  "configured_grid_candidate_radius_m": 500.0,
+  "configured_max_candidates_per_cell": 12,
+  "coverage_ratio": 1.0,
+  "in_scope_cells": 14076,
+  "in_scope_ratio": 0.5977831570900751,
+  "linked_cells": 23547,
+  "links": 313052,
+  "selection_policy": "runtime_aligned"
+}

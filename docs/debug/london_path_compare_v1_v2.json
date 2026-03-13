@@ -1,0 +1,692 @@
+{
+  "city": "london",
+  "pair_count": 10,
+  "pairs": [
+    {
+      "od": {
+        "name": "King's Cross St Pancras to Canary Wharf",
+        "origin_lat": 51.5308,
+        "origin_lon": -0.1238,
+        "destination_lat": 51.5033,
+        "destination_lon": -0.0184
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 1415,
+        "origin_walk_s": 110,
+        "graph_time_s": 1277,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 1277,
+        "transfer_s": 0,
+        "destination_walk_s": 28,
+        "transfer_count": 1,
+        "ride_labels": [
+          "Northern",
+          "Northern",
+          "Northern",
+          "Northern",
+          "Northern",
+          "Jubilee",
+          "Jubilee",
+          "Jubilee"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Northern",
+          "ride:Northern",
+          "ride:Northern",
+          "ride:Northern",
+          "ride:Northern",
+          "transfer",
+          "ride:Jubilee",
+          "ride:Jubilee",
+          "ride:Jubilee",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1546,
+        "origin_walk_s": 110,
+        "graph_time_s": 1408,
+        "boarding_wait_s": 150,
+        "ride_runtime_s": 1021,
+        "transfer_s": 237,
+        "destination_walk_s": 28,
+        "transfer_count": 1,
+        "ride_labels": [
+          "Northern",
+          "Jubilee"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Northern",
+          "transfer",
+          "ride:Jubilee",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 131,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Victoria to Brixton",
+        "origin_lat": 51.4965,
+        "origin_lon": -0.1439,
+        "destination_lat": 51.4627,
+        "destination_lon": -0.1145
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 572,
+        "origin_walk_s": 69,
+        "graph_time_s": 468,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 468,
+        "transfer_s": 0,
+        "destination_walk_s": 35,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Victoria",
+          "Victoria",
+          "Victoria",
+          "Victoria"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Victoria",
+          "ride:Victoria",
+          "ride:Victoria",
+          "ride:Victoria",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 616,
+        "origin_walk_s": 69,
+        "graph_time_s": 512,
+        "boarding_wait_s": 60,
+        "ride_runtime_s": 452,
+        "transfer_s": 0,
+        "destination_walk_s": 35,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Victoria"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Victoria",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 44,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Paddington to Liverpool Street",
+        "origin_lat": 51.5154,
+        "origin_lon": -0.1755,
+        "destination_lat": 51.5178,
+        "destination_lon": -0.0823
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 1258,
+        "origin_walk_s": 2,
+        "graph_time_s": 1200,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 1200,
+        "transfer_s": 0,
+        "destination_walk_s": 56,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Circle",
+          "Circle",
+          "Circle",
+          "Circle",
+          "Metropolitan",
+          "Metropolitan",
+          "Metropolitan",
+          "Metropolitan",
+          "Metropolitan"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Circle",
+          "ride:Circle",
+          "ride:Circle",
+          "ride:Circle",
+          "ride:Metropolitan",
+          "ride:Metropolitan",
+          "ride:Metropolitan",
+          "ride:Metropolitan",
+          "ride:Metropolitan",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1372,
+        "origin_walk_s": 327,
+        "graph_time_s": 1011,
+        "boarding_wait_s": 60,
+        "ride_runtime_s": 951,
+        "transfer_s": 0,
+        "destination_walk_s": 34,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Central"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Central",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 114,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Waterloo to Greenwich",
+        "origin_lat": 51.5036,
+        "origin_lon": -0.1143,
+        "destination_lat": 51.4826,
+        "destination_lon": -0.0077
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 1139,
+        "origin_walk_s": 74,
+        "graph_time_s": 981,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 981,
+        "transfer_s": 0,
+        "destination_walk_s": 84,
+        "transfer_count": 1,
+        "ride_labels": [
+          "Jubilee",
+          "Jubilee",
+          "Jubilee",
+          "Jubilee",
+          "UL95 bus",
+          "188 bus"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Jubilee",
+          "ride:Jubilee",
+          "ride:Jubilee",
+          "ride:Jubilee",
+          "transfer",
+          "ride:UL95 bus",
+          "ride:188 bus",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1753,
+        "origin_walk_s": 74,
+        "graph_time_s": 1458,
+        "boarding_wait_s": 690,
+        "ride_runtime_s": 560,
+        "transfer_s": 208,
+        "destination_walk_s": 221,
+        "transfer_count": 1,
+        "ride_labels": [
+          "Jubilee",
+          "UL95 bus"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Jubilee",
+          "transfer",
+          "ride:UL95 bus",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 614,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Stratford to Bank",
+        "origin_lat": 51.5413,
+        "origin_lon": -0.0033,
+        "destination_lat": 51.5134,
+        "destination_lon": -0.089
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 769,
+        "origin_walk_s": 36,
+        "graph_time_s": 710,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 710,
+        "transfer_s": 0,
+        "destination_walk_s": 23,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Central",
+          "Central",
+          "Central",
+          "Central"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Central",
+          "ride:Central",
+          "ride:Central",
+          "ride:Central",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 847,
+        "origin_walk_s": 36,
+        "graph_time_s": 788,
+        "boarding_wait_s": 90,
+        "ride_runtime_s": 698,
+        "transfer_s": 0,
+        "destination_walk_s": 23,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Central"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Central",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 78,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Wimbledon to Oxford Circus",
+        "origin_lat": 51.4214,
+        "origin_lon": -0.2063,
+        "destination_lat": 51.5152,
+        "destination_lon": -0.1419
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 2103,
+        "origin_walk_s": 31,
+        "graph_time_s": 2016,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 2016,
+        "transfer_s": 0,
+        "destination_walk_s": 56,
+        "transfer_count": 1,
+        "ride_labels": [
+          "District",
+          "District",
+          "District",
+          "District",
+          "District",
+          "District",
+          "District",
+          "District",
+          "District",
+          "Circle",
+          "District",
+          "District",
+          "Victoria",
+          "Victoria"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:Circle",
+          "ride:District",
+          "ride:District",
+          "transfer",
+          "ride:Victoria",
+          "ride:Victoria",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 2224,
+        "origin_walk_s": 31,
+        "graph_time_s": 2137,
+        "boarding_wait_s": 150,
+        "ride_runtime_s": 1867,
+        "transfer_s": 120,
+        "destination_walk_s": 56,
+        "transfer_count": 1,
+        "ride_labels": [
+          "District",
+          "Victoria"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:District",
+          "transfer",
+          "ride:Victoria",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 121,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Stondon Walk to Queen Victoria Street",
+        "origin_lat": 51.53202,
+        "origin_lon": 0.04584,
+        "destination_lat": 51.51171,
+        "destination_lon": -0.09979
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 2275,
+        "origin_walk_s": 149,
+        "graph_time_s": 1854,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 1854,
+        "transfer_s": 0,
+        "destination_walk_s": 272,
+        "transfer_count": 1,
+        "ride_labels": [
+          "N15 bus",
+          "N15 bus",
+          "58 bus",
+          "376 bus",
+          "376 bus",
+          "Circle",
+          "Hammersmith & City",
+          "District",
+          "District",
+          "District",
+          "Circle",
+          "Circle",
+          "Circle",
+          "District",
+          "Circle",
+          "District",
+          "District"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:N15 bus",
+          "ride:N15 bus",
+          "ride:58 bus",
+          "ride:376 bus",
+          "ride:376 bus",
+          "transfer",
+          "ride:Circle",
+          "ride:Hammersmith & City",
+          "ride:District",
+          "ride:District",
+          "ride:District",
+          "ride:Circle",
+          "ride:Circle",
+          "ride:Circle",
+          "ride:District",
+          "ride:Circle",
+          "ride:District",
+          "ride:District",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 2469,
+        "origin_walk_s": 726,
+        "graph_time_s": 1471,
+        "boarding_wait_s": 60,
+        "ride_runtime_s": 1411,
+        "transfer_s": 0,
+        "destination_walk_s": 272,
+        "transfer_count": 0,
+        "ride_labels": [
+          "District"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:District",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 194,
+      "changed_reachability": false,
+      "changed_transfer_count": true,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Streatham High Road to Sarsfeld Road",
+        "origin_lat": 51.42689,
+        "origin_lon": -0.13075,
+        "destination_lat": 51.44189,
+        "destination_lon": -0.16132
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 1196,
+        "origin_walk_s": 155,
+        "graph_time_s": 732,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 732,
+        "transfer_s": 0,
+        "destination_walk_s": 309,
+        "transfer_count": 0,
+        "ride_labels": [
+          "319 bus",
+          "319 bus",
+          "319 bus",
+          "319 bus",
+          "319 bus",
+          "319 bus",
+          "319 bus",
+          "319 bus"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:319 bus",
+          "ride:319 bus",
+          "ride:319 bus",
+          "ride:319 bus",
+          "ride:319 bus",
+          "ride:319 bus",
+          "ride:319 bus",
+          "ride:319 bus",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1432,
+        "origin_walk_s": 155,
+        "graph_time_s": 968,
+        "boarding_wait_s": 300,
+        "ride_runtime_s": 668,
+        "transfer_s": 0,
+        "destination_walk_s": 309,
+        "transfer_count": 0,
+        "ride_labels": [
+          "319 bus"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:319 bus",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 236,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Nursery Road to Bowden Street",
+        "origin_lat": 51.46357,
+        "origin_lon": -0.11688,
+        "destination_lat": 51.48748,
+        "destination_lon": -0.11069
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 724,
+        "origin_walk_s": 139,
+        "graph_time_s": 537,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 537,
+        "transfer_s": 0,
+        "destination_walk_s": 48,
+        "transfer_count": 0,
+        "ride_labels": [
+          "N109 bus",
+          "N3 bus",
+          "N133 bus",
+          "N133 bus",
+          "N133 bus",
+          "N133 bus",
+          "N133 bus",
+          "N3 bus",
+          "N3 bus"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:N109 bus",
+          "ride:N3 bus",
+          "ride:N133 bus",
+          "ride:N133 bus",
+          "ride:N133 bus",
+          "ride:N133 bus",
+          "ride:N133 bus",
+          "ride:N3 bus",
+          "ride:N3 bus",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1140,
+        "origin_walk_s": 195,
+        "graph_time_s": 651,
+        "boarding_wait_s": 120,
+        "ride_runtime_s": 411,
+        "transfer_s": 120,
+        "destination_walk_s": 294,
+        "transfer_count": 1,
+        "ride_labels": [
+          "Victoria",
+          "Northern"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Victoria",
+          "transfer",
+          "ride:Northern",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 416,
+      "changed_reachability": false,
+      "changed_transfer_count": true,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Brixton to Oxford Circus",
+        "origin_lat": 51.4627,
+        "origin_lon": -0.1145,
+        "destination_lat": 51.5152,
+        "destination_lon": -0.1419
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 826,
+        "origin_walk_s": 35,
+        "graph_time_s": 735,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 735,
+        "transfer_s": 0,
+        "destination_walk_s": 56,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Victoria",
+          "Victoria",
+          "Victoria",
+          "Victoria",
+          "Victoria",
+          "Victoria"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Victoria",
+          "ride:Victoria",
+          "ride:Victoria",
+          "ride:Victoria",
+          "ride:Victoria",
+          "ride:Victoria",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 862,
+        "origin_walk_s": 35,
+        "graph_time_s": 771,
+        "boarding_wait_s": 60,
+        "ride_runtime_s": 711,
+        "transfer_s": 0,
+        "destination_walk_s": 56,
+        "transfer_count": 0,
+        "ride_labels": [
+          "Victoria"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:Victoria",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 36,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    }
+  ]
+}

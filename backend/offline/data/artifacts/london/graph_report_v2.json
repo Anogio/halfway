@@ -1,0 +1,25 @@
+{
+  "alight_edges": 53629,
+  "boarding_edges": 53629,
+  "city": "london",
+  "edge_kind_counts": {
+    "alight": 53629,
+    "boarding": 53629,
+    "ride": 51984,
+    "transfer_fallback": 79214,
+    "transfer_gtfs": 212,
+    "transfer_pathway": 912
+  },
+  "graph_edges": 239580,
+  "nodes": 74615,
+  "onboard_nodes": 53629,
+  "physical_nodes": 20986,
+  "ride_edges_raw": 51984,
+  "version": "v2",
+  "wait_stats": {
+    "max_wait_s": 600,
+    "mean_wait_s": 362.5389755011136,
+    "min_wait_s": 30,
+    "routes_with_wait": 1347
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "city": "paris",
+  "failures": [],
+  "metrics": {
+    "avg_out_degree": 11.554933481152993,
+    "grid_in_scope_cells": 72071,
+    "grid_linked_cells": 118548,
+    "grid_reachability_ratio_from_city_center": 0.4760722065740728,
+    "mape": 0.06287878787878788,
+    "mape_threshold": 0.2,
+    "performance_max_ms": 169.09845800182666,
+    "performance_p50_ms": 146.10979099961696,
+    "performance_p95_ms": 169.09845800182666,
+    "performance_p95_threshold_ms": 1500.0,
+    "performance_samples_ms": [
+      143.87645800161408,
+      145.93758400224033,
+      146.10979099961696,
+      169.09845800182666
+    ],
+    "range_tolerance_ratio": 0.25
+  },
+  "od_results": [
+    {
+      "expected_max_s": 2100,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Chatelet-Les Halles to La Defense",
+      "predicted_s": 712,
+      "tolerance_max_s": 2475,
+      "tolerance_min_s": 225
+    },
+    {
+      "expected_max_s": 1800,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.125,
+      "name": "Gare du Nord to Saint-Michel Notre-Dame",
+      "predicted_s": 450,
+      "tolerance_max_s": 2100,
+      "tolerance_min_s": 300
+    },
+    {
+      "expected_max_s": 1500,
+      "expected_min_s": 480,
+      "in_expected_range": true,
+      "mape": 0.06363636363636363,
+      "name": "Bastille to Nation",
+      "predicted_s": 417,
+      "tolerance_max_s": 1755,
+      "tolerance_min_s": 225
+    }
+  ],
+  "ok": true,
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

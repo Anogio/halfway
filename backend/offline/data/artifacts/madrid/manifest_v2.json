@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "name": "graph_v2_weekday.json",
+      "sha256": "73d64d281df80ecee750e41c095c7c83cc2f2c578b50a6cec6ff7dcc6982cd7c",
+      "size_bytes": 8665356
+    },
+    {
+      "name": "nodes_v2.csv",
+      "sha256": "e7fe939cdc834f75992e53516318115acedd349e5bacc77dd3e0aab4a95f8d84",
+      "size_bytes": 7823499
+    },
+    {
+      "name": "grid_cells_v2.csv",
+      "sha256": "d5e3e405fcdfdbc02858dbaa6fb0ecbb20312c15424bb6c8d16c874dea317c8d",
+      "size_bytes": 718883
+    },
+    {
+      "name": "grid_links_v2.csv",
+      "sha256": "b867eecac60a8b13530f6d8c11c93a74fc7a8bc9c152bb508eb8cc797ca861b7",
+      "size_bytes": 4949161
+    },
+    {
+      "name": "validation_v2.json",
+      "sha256": "865684ca7ca25e9b84655cd542e3f29af5354e1fbe3a5480dae480af0a4b653d",
+      "size_bytes": 6118
+    }
+  ],
+  "build_timestamp_utc": "2026-03-13T07:49:33.968500+00:00",
+  "city": "madrid",
+  "config_hash": "52bcb1c079c32f1e0d87c06ac7b9448f9a62a7be2571e098d1ac8899548eb1be",
+  "counts": {
+    "edges": 193301,
+    "nodes": 52096
+  },
+  "feed_info": {
+    "feed_end_date": "20270305",
+    "feed_lang": "es",
+    "feed_publisher_name": "Consorcio Regional de Transportes de Madrid + EMT Madrid",
+    "feed_publisher_url": "https://www.crtm.es/",
+    "feed_start_date": "20250527",
+    "feed_version": "metro_ligero:20260205,metro:20250527,emt:google_transit_M6,urban_bus:20260204,interurban_bus:20260204"
+  },
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

@@ -1,0 +1,16 @@
+{
+  "access_fallback_k": 3,
+  "access_limit": 24,
+  "access_radius_m": 800.0,
+  "cell_size_m": 250.0,
+  "cells": 118548,
+  "city": "paris",
+  "configured_grid_candidate_radius_m": 500.0,
+  "configured_max_candidates_per_cell": 12,
+  "coverage_ratio": 1.0,
+  "in_scope_cells": 72005,
+  "in_scope_ratio": 0.6073910989641327,
+  "linked_cells": 118548,
+  "links": 1207924,
+  "selection_policy": "runtime_aligned"
+}

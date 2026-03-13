@@ -1,0 +1,1 @@
+"""Offline artifact generation package."""

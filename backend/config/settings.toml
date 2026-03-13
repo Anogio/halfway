@@ -1,0 +1,375 @@
+[project]
+name = "transportation-heatmap"
+
+[paths]
+offline_raw_dir = "offline/data/raw"
+offline_interim_dir = "offline/data/interim"
+offline_artifacts_dir = "offline/data/artifacts"
+
+[service]
+weekdays_only = true
+exclude_holidays = true
+
+[modes]
+include_route_types = [0, 1, 2, 3, 6, 7]
+include_all_bus = true
+
+[search]
+first_mile_radius_m = 800
+first_mile_fallback_k = 3
+transfer_fallback_radius_m = 250
+transfer_fallback_max_neighbors = 8
+grid_candidate_radius_m = 500
+
+[weights]
+walk_speed_mps = 1.2
+transfer_penalty_s = 180
+wait_cap_s = 600
+
+[grid]
+cell_size_m = 250
+max_candidates_per_cell = 12
+
+[runtime]
+max_time_s = 3600
+max_seed_nodes = 24
+isochrone_bucket_size_s = 300
+
+[graph]
+max_interstop_ride_s = 10800
+
+[cities.paris]
+label = "Paris"
+artifact_version = "v2"
+
+[cities.paris.paths]
+gtfs_input = "offline/data/gtfs/paris"
+
+[cities.paris.scope]
+use_bbox = true
+bbox = [1.70001, 48.40567, 2.91042, 49.15218] # min_lon, min_lat, max_lon, max_lat
+default_view = [48.8566, 2.3522, 11]
+
+[cities.paris.geocoding]
+country_codes = "fr"
+viewbox = "1.70001,48.40567,2.91042,49.15218"
+bounded = true
+
+[cities.paris.validation]
+mape_threshold = 0.20
+range_tolerance_ratio = 0.25
+performance_p95_ms_threshold = 1500
+
+[[cities.paris.validation.od_pairs]]
+name = "Chatelet-Les Halles to La Defense"
+from_lat = 48.8606
+from_lon = 2.3479
+to_lat = 48.8924
+to_lon = 2.2369
+expected_min_s = 600
+expected_max_s = 2100
+
+[[cities.paris.validation.od_pairs]]
+name = "Gare du Nord to Saint-Michel Notre-Dame"
+from_lat = 48.8809
+from_lon = 2.3553
+to_lat = 48.8530
+to_lon = 2.3449
+expected_min_s = 600
+expected_max_s = 1800
+
+[[cities.paris.validation.od_pairs]]
+name = "Bastille to Nation"
+from_lat = 48.8530
+from_lon = 2.3692
+to_lat = 48.8482
+to_lon = 2.3958
+expected_min_s = 480
+expected_max_s = 1500
+
+[cities.london]
+label = "London"
+artifact_version = "v2"
+
+[cities.london.paths]
+gtfs_input = "offline/data/gtfs/london"
+
+[cities.london.scope]
+use_bbox = true
+bbox = [-0.5103, 51.2868, 0.3340, 51.6923] # min_lon, min_lat, max_lon, max_lat
+default_view = [51.5074, -0.1278, 11]
+
+[cities.london.geocoding]
+country_codes = "gb"
+viewbox = "-0.5103,51.2868,0.3340,51.6923"
+bounded = true
+
+[cities.london.validation]
+mape_threshold = 0.25
+range_tolerance_ratio = 0.30
+performance_p95_ms_threshold = 2000
+
+[[cities.london.validation.od_pairs]]
+name = "King's Cross St Pancras to Canary Wharf"
+from_lat = 51.5308
+from_lon = -0.1238
+to_lat = 51.5033
+to_lon = -0.0184
+expected_min_s = 900
+expected_max_s = 2400
+
+[[cities.london.validation.od_pairs]]
+name = "Victoria to Brixton"
+from_lat = 51.4965
+from_lon = -0.1439
+to_lat = 51.4627
+to_lon = -0.1145
+expected_min_s = 600
+expected_max_s = 1800
+
+[[cities.london.validation.od_pairs]]
+name = "Paddington to Liverpool Street"
+from_lat = 51.5154
+from_lon = -0.1755
+to_lat = 51.5178
+to_lon = -0.0823
+expected_min_s = 900
+expected_max_s = 2400
+
+[[cities.london.validation.od_pairs]]
+name = "Waterloo to Greenwich"
+from_lat = 51.5036
+from_lon = -0.1143
+to_lat = 51.4826
+to_lon = -0.0077
+expected_min_s = 1200
+expected_max_s = 3300
+
+[[cities.london.validation.od_pairs]]
+name = "Stratford to Bank"
+from_lat = 51.5413
+from_lon = -0.0033
+to_lat = 51.5134
+to_lon = -0.0890
+expected_min_s = 900
+expected_max_s = 2400
+
+[[cities.london.validation.od_pairs]]
+name = "Wimbledon to Oxford Circus"
+from_lat = 51.4214
+from_lon = -0.2063
+to_lat = 51.5152
+to_lon = -0.1419
+expected_min_s = 1500
+expected_max_s = 3900
+
+[cities.madrid]
+label = "Madrid"
+artifact_version = "v2"
+
+[cities.madrid.paths]
+gtfs_input = "offline/data/gtfs/madrid"
+
+[cities.madrid.scope]
+bbox = [-3.9200, 40.2700, -3.5050, 40.6450] # min_lon, min_lat, max_lon, max_lat
+default_view = [40.4168, -3.7038, 10]
+use_bbox = true
+
+[cities.madrid.geocoding]
+country_codes = "es"
+viewbox = "-3.9200,40.2700,-3.5050,40.6450"
+bounded = true
+
+[cities.madrid.validation]
+mape_threshold = 0.25
+range_tolerance_ratio = 0.30
+performance_p95_ms_threshold = 2000
+
+[[cities.madrid.validation.od_pairs]]
+name = "Sol to Nuevos Ministerios"
+from_lat = 40.4169
+from_lon = -3.7035
+to_lat = 40.4463
+to_lon = -3.6925
+expected_min_s = 600
+expected_max_s = 1800
+
+[[cities.madrid.validation.od_pairs]]
+name = "Atocha to Plaza de Castilla"
+from_lat = 40.4066
+from_lon = -3.6890
+to_lat = 40.4669
+to_lon = -3.6894
+expected_min_s = 900
+expected_max_s = 2400
+
+[[cities.madrid.validation.od_pairs]]
+name = "Moncloa to Aluche"
+from_lat = 40.4342
+from_lon = -3.7195
+to_lat = 40.3859
+to_lon = -3.7607
+expected_min_s = 1200
+expected_max_s = 3000
+
+[[cities.madrid.validation.od_pairs]]
+name = "Avenida de America to Aeropuerto T4"
+from_lat = 40.4382
+from_lon = -3.6794
+to_lat = 40.4918
+to_lon = -3.5934
+expected_min_s = 1500
+expected_max_s = 3600
+
+[[cities.madrid.validation.od_pairs]]
+name = "Legazpi to Chamartin"
+from_lat = 40.3914
+from_lon = -3.6944
+to_lat = 40.4721
+to_lon = -3.6826
+expected_min_s = 1200
+expected_max_s = 3000
+
+[[cities.madrid.validation.od_pairs]]
+name = "Principe Pio to Boadilla Centro"
+from_lat = 40.4211
+from_lon = -3.7203
+to_lat = 40.4076
+to_lon = -3.8760
+expected_min_s = 1800
+expected_max_s = 4200
+
+[[cities.madrid.validation.od_pairs]]
+name = "Sol to Moncloa"
+from_lat = 40.4169
+from_lon = -3.7035
+to_lat = 40.4342
+to_lon = -3.7195
+expected_min_s = 900
+expected_max_s = 2100
+
+[[cities.madrid.validation.od_pairs]]
+name = "Opera to Principe Pio"
+from_lat = 40.4181
+from_lon = -3.7094
+to_lat = 40.4211
+to_lon = -3.7203
+expected_min_s = 300
+expected_max_s = 900
+
+[[cities.madrid.validation.od_pairs]]
+name = "Plaza de Castilla to Santiago Bernabeu"
+from_lat = 40.4669
+from_lon = -3.6894
+to_lat = 40.4516
+to_lon = -3.6900
+expected_min_s = 300
+expected_max_s = 900
+
+[[cities.madrid.validation.od_pairs]]
+name = "Embajadores to Callao"
+from_lat = 40.4053
+from_lon = -3.7027
+to_lat = 40.4203
+to_lon = -3.7058
+expected_min_s = 600
+expected_max_s = 1500
+
+[[cities.madrid.validation.od_pairs]]
+name = "Cuatro Caminos to Avenida de America"
+from_lat = 40.4469
+from_lon = -3.7034
+to_lat = 40.4382
+to_lon = -3.6794
+expected_min_s = 600
+expected_max_s = 1500
+
+[[cities.madrid.validation.od_pairs]]
+name = "Plaza Eliptica to Sol"
+from_lat = 40.3844
+from_lon = -3.7184
+to_lat = 40.4169
+to_lon = -3.7035
+expected_min_s = 1200
+expected_max_s = 2700
+
+[[cities.madrid.validation.od_pairs]]
+name = "Nuevos Ministerios to Chamartin"
+from_lat = 40.4463
+from_lon = -3.6925
+to_lat = 40.4721
+to_lon = -3.6826
+expected_min_s = 420
+expected_max_s = 1200
+
+[[cities.madrid.validation.od_pairs]]
+name = "Pinar de Chamartin to Puerta del Sur"
+from_lat = 40.4801
+from_lon = -3.6668
+to_lat = 40.3459
+to_lon = -3.8126
+expected_min_s = 2700
+expected_max_s = 4200
+
+[[cities.madrid.validation.od_pairs]]
+name = "Moncloa to Plaza de Espana"
+from_lat = 40.4342
+from_lon = -3.7195
+to_lat = 40.4238
+to_lon = -3.7122
+expected_min_s = 360
+expected_max_s = 1200
+
+[[cities.madrid.validation.od_pairs]]
+name = "Canillejas to Sol"
+from_lat = 40.4491
+from_lon = -3.6106
+to_lat = 40.4169
+to_lon = -3.7035
+expected_min_s = 1500
+expected_max_s = 3000
+
+[[cities.madrid.validation.od_pairs]]
+name = "Casa de Campo to Aluche"
+from_lat = 40.4020
+from_lon = -3.7600
+to_lat = 40.3859
+to_lon = -3.7607
+expected_min_s = 480
+expected_max_s = 1200
+
+[[cities.madrid.validation.od_pairs]]
+name = "Sol to Barajas"
+from_lat = 40.4169
+from_lon = -3.7035
+to_lat = 40.4756
+to_lon = -3.5825
+expected_min_s = 2100
+expected_max_s = 3600
+
+[[cities.madrid.validation.od_pairs]]
+name = "Las Rosas to Atocha"
+from_lat = 40.4290
+from_lon = -3.6034
+to_lat = 40.4066
+to_lon = -3.6890
+expected_min_s = 1800
+expected_max_s = 3300
+
+[[cities.madrid.validation.od_pairs]]
+name = "Gregorio Maranon to Tribunal"
+from_lat = 40.4395
+from_lon = -3.6909
+to_lat = 40.4260
+to_lon = -3.7019
+expected_min_s = 420
+expected_max_s = 1200
+
+[[cities.madrid.validation.od_pairs]]
+name = "Colonia Jardin to Aravaca"
+from_lat = 40.3961
+from_lon = -3.7745
+to_lat = 40.4481
+to_lon = -3.7859
+expected_min_s = 1200
+expected_max_s = 2100

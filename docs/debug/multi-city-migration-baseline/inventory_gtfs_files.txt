@@ -1,0 +1,10 @@
+gouv_paris_gtfs-export/agency.txt
+gouv_paris_gtfs-export/calendar.txt
+gouv_paris_gtfs-export/calendar_dates.txt
+gouv_paris_gtfs-export/feed_info.txt
+gouv_paris_gtfs-export/pathways.txt
+gouv_paris_gtfs-export/routes.txt
+gouv_paris_gtfs-export/stop_times.txt
+gouv_paris_gtfs-export/stops.txt
+gouv_paris_gtfs-export/transfers.txt
+gouv_paris_gtfs-export/trips.txt

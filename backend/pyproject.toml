@@ -1,0 +1,16 @@
+[project]
+name = "transit-backend"
+version = "0.1.0"
+description = "Runtime API for transit heatmaps"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi",
+    "httpx",
+    "uvicorn",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.13.0",
+]

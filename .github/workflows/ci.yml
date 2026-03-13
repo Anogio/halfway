@@ -1,0 +1,85 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend deps
+        working-directory: frontend
+        run: npm ci
+
+      - name: Install Playwright browser
+        working-directory: frontend
+        run: npx playwright install --with-deps chromium
+
+      - name: Tooling check
+        run: make doctor
+
+      - name: Lint
+        run: make lint
+
+      - name: Unit tests
+        run: make test
+
+      - name: Verify pinned runtime artifacts are present
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import tomllib
+
+          settings_path = Path("backend/config/settings.toml")
+          settings = tomllib.loads(settings_path.read_text(encoding="utf-8"))
+          artifacts_root = Path("backend/offline/data/artifacts")
+
+          required_prefixes = (
+              "graph",
+              "nodes",
+              "grid_cells",
+              "grid_links",
+              "manifest",
+              "validation",
+          )
+
+          missing: list[str] = []
+          for city_id, city_cfg in sorted(settings["cities"].items()):
+              version = city_cfg["artifact_version"]
+              city_dir = artifacts_root / city_id
+              for prefix in required_prefixes:
+                  if prefix == "graph":
+                      artifact = city_dir / f"{prefix}_{version}_weekday.json"
+                  elif prefix in {"manifest", "validation"}:
+                      artifact = city_dir / f"{prefix}_{version}.json"
+                  else:
+                      artifact = city_dir / f"{prefix}_{version}.csv"
+                  if not artifact.is_file():
+                      missing.append(str(artifact))
+
+          if missing:
+              raise SystemExit("Missing pinned runtime artifacts:\n" + "\n".join(missing))
+          PY
+
+      - name: E2E tests
+        run: make e2e

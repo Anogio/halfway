@@ -1,0 +1,25 @@
+{
+  "alight_edges": 30490,
+  "boarding_edges": 30490,
+  "city": "madrid",
+  "edge_kind_counts": {
+    "alight": 30490,
+    "boarding": 30490,
+    "ride": 29340,
+    "transfer_fallback": 102717,
+    "transfer_gtfs": 264,
+    "transfer_pathway": 0
+  },
+  "graph_edges": 193301,
+  "nodes": 52096,
+  "onboard_nodes": 30490,
+  "physical_nodes": 21606,
+  "ride_edges_raw": 29340,
+  "version": "v2",
+  "wait_stats": {
+    "max_wait_s": 600,
+    "mean_wait_s": 463.22193658954586,
+    "min_wait_s": 60,
+    "routes_with_wait": 1167
+  }
+}

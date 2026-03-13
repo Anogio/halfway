@@ -1,0 +1,16 @@
+backend/offline/data/artifacts/graph_report_v0.json
+backend/offline/data/artifacts/graph_report_v1.json
+backend/offline/data/artifacts/graph_v0_weekday.json
+backend/offline/data/artifacts/graph_v1_weekday.json
+backend/offline/data/artifacts/grid_cells_v0.csv
+backend/offline/data/artifacts/grid_cells_v1.csv
+backend/offline/data/artifacts/grid_links_v0.csv
+backend/offline/data/artifacts/grid_links_v1.csv
+backend/offline/data/artifacts/grid_report_v0.json
+backend/offline/data/artifacts/grid_report_v1.json
+backend/offline/data/artifacts/manifest_v0.json
+backend/offline/data/artifacts/manifest_v1.json
+backend/offline/data/artifacts/nodes_v0.csv
+backend/offline/data/artifacts/nodes_v1.csv
+backend/offline/data/artifacts/validation_v0.json
+backend/offline/data/artifacts/validation_v1.json

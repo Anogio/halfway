@@ -1,0 +1,464 @@
+{
+  "city": "paris",
+  "pair_count": 7,
+  "pairs": [
+    {
+      "od": {
+        "name": "Chatelet-Les Halles to La Defense",
+        "origin_lat": 48.8606,
+        "origin_lon": 2.3479,
+        "destination_lat": 48.8924,
+        "destination_lon": 2.2369
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 678,
+        "origin_walk_s": 120,
+        "graph_time_s": 491,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 491,
+        "transfer_s": 0,
+        "destination_walk_s": 67,
+        "transfer_count": 0,
+        "ride_labels": [
+          "A",
+          "A",
+          "A"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:A",
+          "ride:A",
+          "ride:A",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 712,
+        "origin_walk_s": 120,
+        "graph_time_s": 525,
+        "boarding_wait_s": 40,
+        "ride_runtime_s": 485,
+        "transfer_s": 0,
+        "destination_walk_s": 67,
+        "transfer_count": 0,
+        "ride_labels": [
+          "A"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:A",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 34,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Gare du Nord to Saint-Michel Notre-Dame",
+        "origin_lat": 48.8809,
+        "origin_lon": 2.3553,
+        "destination_lat": 48.853,
+        "destination_lon": 2.3449
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 423,
+        "origin_walk_s": 155,
+        "graph_time_s": 264,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 264,
+        "transfer_s": 0,
+        "destination_walk_s": 4,
+        "transfer_count": 0,
+        "ride_labels": [
+          "B",
+          "B"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:B",
+          "ride:B",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 450,
+        "origin_walk_s": 155,
+        "graph_time_s": 291,
+        "boarding_wait_s": 29,
+        "ride_runtime_s": 262,
+        "transfer_s": 0,
+        "destination_walk_s": 4,
+        "transfer_count": 0,
+        "ride_labels": [
+          "B"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:B",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 27,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Bastille to Nation",
+        "origin_lat": 48.853,
+        "origin_lon": 2.3692,
+        "destination_lat": 48.8482,
+        "destination_lon": 2.3958
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 390,
+        "origin_walk_s": 101,
+        "graph_time_s": 278,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 278,
+        "transfer_s": 0,
+        "destination_walk_s": 11,
+        "transfer_count": 0,
+        "ride_labels": [
+          "1",
+          "1",
+          "1"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:1",
+          "ride:1",
+          "ride:1",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 417,
+        "origin_walk_s": 101,
+        "graph_time_s": 305,
+        "boarding_wait_s": 30,
+        "ride_runtime_s": 275,
+        "transfer_s": 0,
+        "destination_walk_s": 11,
+        "transfer_count": 0,
+        "ride_labels": [
+          "1"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:1",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 27,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Republique to eastern suburb feeder",
+        "origin_lat": 48.86823,
+        "origin_lon": 2.35945,
+        "destination_lat": 48.84565,
+        "destination_lon": 2.50564
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 1825,
+        "origin_walk_s": 237,
+        "graph_time_s": 1504,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 1504,
+        "transfer_s": 0,
+        "destination_walk_s": 84,
+        "transfer_count": 2,
+        "ride_labels": [
+          "9",
+          "9",
+          "9",
+          "9",
+          "9",
+          "9",
+          "A",
+          "A",
+          "A",
+          "114",
+          "114",
+          "114"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:9",
+          "ride:9",
+          "ride:9",
+          "ride:9",
+          "ride:9",
+          "ride:9",
+          "transfer",
+          "ride:A",
+          "ride:A",
+          "ride:A",
+          "transfer",
+          "ride:114",
+          "ride:114",
+          "ride:114",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1995,
+        "origin_walk_s": 237,
+        "graph_time_s": 1674,
+        "boarding_wait_s": 190,
+        "ride_runtime_s": 1133,
+        "transfer_s": 351,
+        "destination_walk_s": 84,
+        "transfer_count": 2,
+        "ride_labels": [
+          "9",
+          "A",
+          "114"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:9",
+          "transfer",
+          "ride:A",
+          "transfer",
+          "ride:114",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 170,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Jacques Bonsergent to Barbes via Gare de l'Est",
+        "origin_lat": 48.86826,
+        "origin_lon": 2.35942,
+        "destination_lat": 48.88479,
+        "destination_lon": 2.34669
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 826,
+        "origin_walk_s": 246,
+        "graph_time_s": 355,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 355,
+        "transfer_s": 0,
+        "destination_walk_s": 225,
+        "transfer_count": 1,
+        "ride_labels": [
+          "5",
+          "4",
+          "4"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:5",
+          "transfer",
+          "ride:4",
+          "ride:4",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 883,
+        "origin_walk_s": 246,
+        "graph_time_s": 412,
+        "boarding_wait_s": 60,
+        "ride_runtime_s": 232,
+        "transfer_s": 120,
+        "destination_walk_s": 225,
+        "transfer_count": 1,
+        "ride_labels": [
+          "5",
+          "4"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:5",
+          "transfer",
+          "ride:4",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 57,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Montparnasse to La Defense",
+        "origin_lat": 48.8422,
+        "origin_lon": 2.3215,
+        "destination_lat": 48.8919,
+        "destination_lon": 2.2384
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 1064,
+        "origin_walk_s": 33,
+        "graph_time_s": 991,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 991,
+        "transfer_s": 0,
+        "destination_walk_s": 40,
+        "transfer_count": 2,
+        "ride_labels": [
+          "13",
+          "13",
+          "13",
+          "13",
+          "13",
+          "1",
+          "1",
+          "1",
+          "A"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:13",
+          "ride:13",
+          "ride:13",
+          "ride:13",
+          "ride:13",
+          "transfer",
+          "ride:1",
+          "ride:1",
+          "ride:1",
+          "transfer",
+          "ride:A",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1154,
+        "origin_walk_s": 33,
+        "graph_time_s": 1081,
+        "boarding_wait_s": 100,
+        "ride_runtime_s": 741,
+        "transfer_s": 240,
+        "destination_walk_s": 40,
+        "transfer_count": 2,
+        "ride_labels": [
+          "13",
+          "1",
+          "A"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:13",
+          "transfer",
+          "ride:1",
+          "transfer",
+          "ride:A",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 90,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    },
+    {
+      "od": {
+        "name": "Belleville to Denfert-Rochereau",
+        "origin_lat": 48.872,
+        "origin_lon": 2.3769,
+        "destination_lat": 48.8338,
+        "destination_lon": 2.3324
+      },
+      "v1": {
+        "reachable": true,
+        "total_time_s": 991,
+        "origin_walk_s": 13,
+        "graph_time_s": 902,
+        "boarding_wait_s": 0,
+        "ride_runtime_s": 902,
+        "transfer_s": 0,
+        "destination_walk_s": 76,
+        "transfer_count": 1,
+        "ride_labels": [
+          "11",
+          "11",
+          "11",
+          "11",
+          "11",
+          "11",
+          "B",
+          "B",
+          "B",
+          "B"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:11",
+          "ride:11",
+          "ride:11",
+          "ride:11",
+          "ride:11",
+          "ride:11",
+          "transfer",
+          "ride:B",
+          "ride:B",
+          "ride:B",
+          "ride:B",
+          "walk_destination"
+        ]
+      },
+      "v2": {
+        "reachable": true,
+        "total_time_s": 1052,
+        "origin_walk_s": 13,
+        "graph_time_s": 963,
+        "boarding_wait_s": 89,
+        "ride_runtime_s": 680,
+        "transfer_s": 194,
+        "destination_walk_s": 76,
+        "transfer_count": 1,
+        "ride_labels": [
+          "11",
+          "B"
+        ],
+        "segment_signature": [
+          "walk_origin",
+          "ride:11",
+          "transfer",
+          "ride:B",
+          "walk_destination"
+        ]
+      },
+      "delta_total_s": 61,
+      "changed_reachability": false,
+      "changed_transfer_count": false,
+      "changed_rides": true,
+      "changed_signature": true
+    }
+  ]
+}

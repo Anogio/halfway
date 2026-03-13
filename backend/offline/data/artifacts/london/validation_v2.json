@@ -1,0 +1,90 @@
+{
+  "city": "london",
+  "failures": [],
+  "metrics": {
+    "avg_out_degree": 11.416182216715907,
+    "grid_in_scope_cells": 28388,
+    "grid_linked_cells": 42535,
+    "grid_reachability_ratio_from_city_center": 0.43176694377906155,
+    "mape": 0.005353535353535353,
+    "mape_threshold": 0.25,
+    "performance_max_ms": 75.12679099818342,
+    "performance_p50_ms": 70.40204200166045,
+    "performance_p95_ms": 75.12679099818342,
+    "performance_p95_threshold_ms": 2000.0,
+    "performance_samples_ms": [
+      54.947999997239094,
+      65.91895900055533,
+      66.35429099696921,
+      70.40204200166045,
+      71.67341600143118,
+      75.12679099818342
+    ],
+    "range_tolerance_ratio": 0.3
+  },
+  "od_results": [
+    {
+      "expected_max_s": 2400,
+      "expected_min_s": 900,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "King's Cross St Pancras to Canary Wharf",
+      "predicted_s": 1546,
+      "tolerance_max_s": 2850,
+      "tolerance_min_s": 450
+    },
+    {
+      "expected_max_s": 1800,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Victoria to Brixton",
+      "predicted_s": 616,
+      "tolerance_max_s": 2160,
+      "tolerance_min_s": 240
+    },
+    {
+      "expected_max_s": 2400,
+      "expected_min_s": 900,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Paddington to Liverpool Street",
+      "predicted_s": 1372,
+      "tolerance_max_s": 2850,
+      "tolerance_min_s": 450
+    },
+    {
+      "expected_max_s": 3300,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Waterloo to Greenwich",
+      "predicted_s": 1847,
+      "tolerance_max_s": 3930,
+      "tolerance_min_s": 570
+    },
+    {
+      "expected_max_s": 2400,
+      "expected_min_s": 900,
+      "in_expected_range": true,
+      "mape": 0.03212121212121212,
+      "name": "Stratford to Bank",
+      "predicted_s": 847,
+      "tolerance_max_s": 2850,
+      "tolerance_min_s": 450
+    },
+    {
+      "expected_max_s": 3900,
+      "expected_min_s": 1500,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Wimbledon to Oxford Circus",
+      "predicted_s": 2224,
+      "tolerance_max_s": 4620,
+      "tolerance_min_s": 780
+    }
+  ],
+  "ok": true,
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

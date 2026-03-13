@@ -1,0 +1,37 @@
+{
+  "keys": [
+    "destination",
+    "paths",
+    "profile"
+  ],
+  "first_path_keys": [
+    "destination",
+    "nodes",
+    "origin",
+    "origin_id",
+    "profile",
+    "reachable",
+    "segments",
+    "summary"
+  ],
+  "first_path_reachable": true,
+  "first_path_summary": {
+    "seed_count": 24,
+    "destination_candidate_count": 24,
+    "node_count": 7,
+    "segment_count": 8,
+    "origin_walk_s": 70,
+    "graph_time_s": 510,
+    "destination_walk_s": 202,
+    "total_time_s": 782,
+    "max_time_s": 3600
+  },
+  "first_path_first_segment": {
+    "type": "walk_origin",
+    "kind": "walk_origin",
+    "seconds": 70,
+    "from_label": "origin",
+    "to_label": "H\u00f4tel de Ville",
+    "to_stop_id": "PARIS174301"
+  }
+}

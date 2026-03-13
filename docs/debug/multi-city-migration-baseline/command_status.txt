@@ -1,0 +1,14 @@
+Phase 0 baseline run: 2026-03-11T09:13:36Z
+make lint: OK
+make test: OK
+make baseline: OK
+Paris migration checksum parity:
+- GTFS hashes: OK (diff empty)
+- Interim hashes: OK (diff empty)
+- Artifacts hashes: OK (diff empty)
+
+Post-refactor verification:
+- make lint: OK
+- make test: OK
+- make -C backend/offline build-all CITY=paris: OK
+- BASELINE_CITY=paris make baseline: OK

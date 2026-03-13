@@ -1,0 +1,128 @@
+{
+  "keys": [
+    "feature_collection",
+    "origins",
+    "profile",
+    "stats"
+  ],
+  "stats": {
+    "origin_count": 1,
+    "seed_count": 24,
+    "origin_seed_counts": {
+      "origin-1": 24
+    },
+    "reachable_cells_compute_horizon": 21833,
+    "reachable_cells_render_horizon": 21833,
+    "reachable_cells": 21833,
+    "total_linked_cells": 70001,
+    "compute_max_time_s": 3600,
+    "render_max_time_s": 3600,
+    "bucket_size_s": 300,
+    "bucket_count": 13
+  },
+  "feature_count": 13,
+  "first_feature": {
+    "type": "Feature",
+    "properties": {
+      "bucket_index": 0,
+      "bucket_size_s": 300,
+      "min_time_s": 0,
+      "max_time_s": 300,
+      "cell_count": 10,
+      "polygon_count": 2
+    },
+    "geometry": {
+      "type": "MultiPolygon",
+      "coordinates": [
+        [
+          [
+            [
+              2.3495192,
+              48.8559904
+            ],
+            [
+              2.3495192,
+              48.8537447
+            ],
+            [
+              2.3529225,
+              48.8537447
+            ],
+            [
+              2.3563258,
+              48.8537447
+            ],
+            [
+              2.3563258,
+              48.8559904
+            ],
+            [
+              2.3563258,
+              48.8582361
+            ],
+            [
+              2.3563258,
+              48.8604818
+            ],
+            [
+              2.3529225,
+              48.8604818
+            ],
+            [
+              2.3495192,
+              48.8604818
+            ],
+            [
+              2.3461159,
+              48.8604818
+            ],
+            [
+              2.3427126,
+              48.8604818
+            ],
+            [
+              2.3427126,
+              48.8582361
+            ],
+            [
+              2.3461159,
+              48.8582361
+            ],
+            [
+              2.3461159,
+              48.8559904
+            ],
+            [
+              2.3495192,
+              48.8559904
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              2.3597291,
+              48.8537447
+            ],
+            [
+              2.3631324,
+              48.8537447
+            ],
+            [
+              2.3631324,
+              48.8559904
+            ],
+            [
+              2.3597291,
+              48.8559904
+            ],
+            [
+              2.3597291,
+              48.8537447
+            ]
+          ]
+        ]
+      ]
+    }
+  }
+}

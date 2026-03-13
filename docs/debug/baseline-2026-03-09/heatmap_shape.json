@@ -1,0 +1,19 @@
+{
+  "keys": [
+    "cells",
+    "origin",
+    "profile",
+    "stats"
+  ],
+  "stats": {
+    "seed_count": 24,
+    "reachable_cells": 21833,
+    "total_linked_cells": 70001
+  },
+  "first_cell": {
+    "cell_id": 97584,
+    "lat": 48.2687506,
+    "lon": 2.6847783,
+    "time_s": 3557
+  }
+}

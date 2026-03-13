@@ -1,0 +1,32 @@
+backend/offline/data/gtfs/
+backend/offline/data/raw/
+opendata_gtfs.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.uv-cache/
+
+# Node
+node_modules/
+.next/
+dist/
+
+# Artifacts
+backend/offline/data/interim/
+backend/offline/data/artifacts/*/old/
+output/playwright/
+.playwright-cli/
+
+# OS/editor/logs
+.DS_Store
+.idea/
+.vscode/
+*.log
+*.tmp
+
+# Test artifacts
+.coverage
+htmlcov/
+coverage/

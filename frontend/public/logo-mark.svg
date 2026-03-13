@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="tileGradient" x1="190" y1="820" x2="834" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1f9182" />
+      <stop offset="1" stop-color="#19334e" />
+    </linearGradient>
+    <radialGradient id="tileWarmGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(324 282) rotate(90) scale(310)">
+      <stop offset="0" stop-color="#f5bf4a" stop-opacity=".45" />
+      <stop offset="1" stop-color="#f5bf4a" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="tileCoolGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(348 734) rotate(90) scale(360)">
+      <stop offset="0" stop-color="#33b5a4" stop-opacity=".42" />
+      <stop offset="1" stop-color="#33b5a4" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="pinGradient" x1="512" y1="220" x2="512" y2="838" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f5bf4a" />
+      <stop offset=".62" stop-color="#eca838" />
+      <stop offset="1" stop-color="#d14f2a" />
+    </linearGradient>
+    <radialGradient id="pinHighlight" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(452 304) rotate(90) scale(190)">
+      <stop offset="0" stop-color="#fff7e7" stop-opacity=".6" />
+      <stop offset="1" stop-color="#fff7e7" stop-opacity="0" />
+    </radialGradient>
+    <filter id="tileShadow" x="28" y="50" width="968" height="968" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18" />
+    </filter>
+    <filter id="routeShadow" x="180" y="210" width="650" height="500" color-interpolation-filters="sRGB">
+      <feOffset dy="8" />
+      <feGaussianBlur stdDeviation="7" />
+    </filter>
+    <filter id="pinShadow" x="250" y="196" width="524" height="712" color-interpolation-filters="sRGB">
+      <feOffset dy="14" />
+      <feGaussianBlur stdDeviation="14" />
+    </filter>
+  </defs>
+  <rect x="92" y="110" width="840" height="840" rx="212" fill="#0c1824" fill-opacity=".28" filter="url(#tileShadow)" />
+  <rect x="80" y="80" width="864" height="864" rx="212" fill="url(#tileGradient)" />
+  <rect x="80" y="80" width="864" height="864" rx="212" fill="url(#tileWarmGlow)" />
+  <rect x="80" y="80" width="864" height="864" rx="212" fill="url(#tileCoolGlow)" />
+  <g filter="url(#routeShadow)">
+    <g stroke="#112234" stroke-opacity=".35" stroke-linecap="round" stroke-width="52">
+      <path d="M 286 332 Q 392 372 512 420" />
+<path d="M 746 298 Q 640 356 512 420" />
+<path d="M 282 636 Q 382 534 512 420" />
+    </g>
+  </g>
+  <g stroke="#fff7e7" stroke-linecap="round" stroke-width="52">
+    <path d="M 286 332 Q 392 372 512 420" />
+<path d="M 746 298 Q 640 356 512 420" />
+<path d="M 282 636 Q 382 534 512 420" />
+  </g>
+  <circle cx="286" cy="332" r="26" fill="rgb(31 145 130)" stroke="rgb(255 247 231)" stroke-width="10" />
+<circle cx="746" cy="298" r="26" fill="rgb(209 79 42)" stroke="rgb(255 247 231)" stroke-width="10" />
+<circle cx="282" cy="636" r="26" fill="rgb(245 191 74)" stroke="rgb(255 247 231)" stroke-width="10" />
+  <path d="M 512 838 C 404 694 334 586 334 438 C 334 302 414 220 512 220 C 610 220 690 302 690 438 C 690 586 620 694 512 838 Z" fill="#12273d" fill-opacity=".36" filter="url(#pinShadow)" transform="translate(0 14)" />
+  <path d="M 512 838 C 404 694 334 586 334 438 C 334 302 414 220 512 220 C 610 220 690 302 690 438 C 690 586 620 694 512 838 Z" fill="url(#pinGradient)" stroke="#b24a22" stroke-width="12" />
+  <path d="M 512 838 C 404 694 334 586 334 438 C 334 302 414 220 512 220 C 610 220 690 302 690 438 C 690 586 620 694 512 838 Z" fill="url(#pinHighlight)" />
+  <circle cx="512" cy="420" r="112" fill="#fff7e7" />
+  <circle cx="512" cy="420" r="82" fill="#12273d" />
+  <circle cx="512" cy="420" r="32" fill="#f5bf4a" />
+  <rect x="85" y="85" width="854" height="854" rx="207" stroke="white" stroke-opacity=".22" stroke-width="10" />
+</svg>

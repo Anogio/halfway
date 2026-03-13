@@ -1,0 +1,240 @@
+{
+  "city": "madrid",
+  "failures": [],
+  "metrics": {
+    "avg_out_degree": 8.946635193927612,
+    "grid_in_scope_cells": 14087,
+    "grid_linked_cells": 23547,
+    "grid_reachability_ratio_from_city_center": 0.49087811457372044,
+    "mape": 0.0,
+    "mape_threshold": 0.25,
+    "performance_max_ms": 42.426709002029384,
+    "performance_p50_ms": 37.99250000156462,
+    "performance_p95_ms": 42.426709002029384,
+    "performance_p95_threshold_ms": 2000.0,
+    "performance_samples_ms": [
+      34.359665998636046,
+      35.431208001682535,
+      37.22929200012004,
+      37.99250000156462,
+      41.662958999950206,
+      42.426709002029384
+    ],
+    "range_tolerance_ratio": 0.3
+  },
+  "od_results": [
+    {
+      "expected_max_s": 1800,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Sol to Nuevos Ministerios",
+      "predicted_s": 1356,
+      "tolerance_max_s": 2160,
+      "tolerance_min_s": 240
+    },
+    {
+      "expected_max_s": 2400,
+      "expected_min_s": 900,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Atocha to Plaza de Castilla",
+      "predicted_s": 1667,
+      "tolerance_max_s": 2850,
+      "tolerance_min_s": 450
+    },
+    {
+      "expected_max_s": 3000,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Moncloa to Aluche",
+      "predicted_s": 2359,
+      "tolerance_max_s": 3540,
+      "tolerance_min_s": 660
+    },
+    {
+      "expected_max_s": 3600,
+      "expected_min_s": 1500,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Avenida de America to Aeropuerto T4",
+      "predicted_s": 2085,
+      "tolerance_max_s": 4230,
+      "tolerance_min_s": 870
+    },
+    {
+      "expected_max_s": 3000,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Legazpi to Chamartin",
+      "predicted_s": 2414,
+      "tolerance_max_s": 3540,
+      "tolerance_min_s": 660
+    },
+    {
+      "expected_max_s": 4200,
+      "expected_min_s": 1800,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Principe Pio to Boadilla Centro",
+      "predicted_s": 3187,
+      "tolerance_max_s": 4920,
+      "tolerance_min_s": 1080
+    },
+    {
+      "expected_max_s": 2100,
+      "expected_min_s": 900,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Sol to Moncloa",
+      "predicted_s": 1431,
+      "tolerance_max_s": 2460,
+      "tolerance_min_s": 540
+    },
+    {
+      "expected_max_s": 900,
+      "expected_min_s": 300,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Opera to Principe Pio",
+      "predicted_s": 504,
+      "tolerance_max_s": 1080,
+      "tolerance_min_s": 120
+    },
+    {
+      "expected_max_s": 900,
+      "expected_min_s": 300,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Plaza de Castilla to Santiago Bernabeu",
+      "predicted_s": 545,
+      "tolerance_max_s": 1080,
+      "tolerance_min_s": 120
+    },
+    {
+      "expected_max_s": 1500,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Embajadores to Callao",
+      "predicted_s": 1053,
+      "tolerance_max_s": 1770,
+      "tolerance_min_s": 330
+    },
+    {
+      "expected_max_s": 1500,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Cuatro Caminos to Avenida de America",
+      "predicted_s": 897,
+      "tolerance_max_s": 1770,
+      "tolerance_min_s": 330
+    },
+    {
+      "expected_max_s": 2700,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Plaza Eliptica to Sol",
+      "predicted_s": 2025,
+      "tolerance_max_s": 3150,
+      "tolerance_min_s": 750
+    },
+    {
+      "expected_max_s": 1200,
+      "expected_min_s": 420,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Nuevos Ministerios to Chamartin",
+      "predicted_s": 714,
+      "tolerance_max_s": 1434,
+      "tolerance_min_s": 186
+    },
+    {
+      "expected_max_s": 4200,
+      "expected_min_s": 2700,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Pinar de Chamartin to Puerta del Sur",
+      "predicted_s": 3522,
+      "tolerance_max_s": 4650,
+      "tolerance_min_s": 2250
+    },
+    {
+      "expected_max_s": 1200,
+      "expected_min_s": 360,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Moncloa to Plaza de Espana",
+      "predicted_s": 588,
+      "tolerance_max_s": 1452,
+      "tolerance_min_s": 108
+    },
+    {
+      "expected_max_s": 3000,
+      "expected_min_s": 1500,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Canillejas to Sol",
+      "predicted_s": 2219,
+      "tolerance_max_s": 3450,
+      "tolerance_min_s": 1050
+    },
+    {
+      "expected_max_s": 1200,
+      "expected_min_s": 480,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Casa de Campo to Aluche",
+      "predicted_s": 818,
+      "tolerance_max_s": 1416,
+      "tolerance_min_s": 264
+    },
+    {
+      "expected_max_s": 3600,
+      "expected_min_s": 2100,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Sol to Barajas",
+      "predicted_s": 2937,
+      "tolerance_max_s": 4050,
+      "tolerance_min_s": 1650
+    },
+    {
+      "expected_max_s": 3300,
+      "expected_min_s": 1800,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Las Rosas to Atocha",
+      "predicted_s": 2904,
+      "tolerance_max_s": 3750,
+      "tolerance_min_s": 1350
+    },
+    {
+      "expected_max_s": 1200,
+      "expected_min_s": 420,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Gregorio Maranon to Tribunal",
+      "predicted_s": 697,
+      "tolerance_max_s": 1434,
+      "tolerance_min_s": 186
+    },
+    {
+      "expected_max_s": 2100,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Colonia Jardin to Aravaca",
+      "predicted_s": 1607,
+      "tolerance_max_s": 2370,
+      "tolerance_min_s": 930
+    }
+  ],
+  "ok": true,
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

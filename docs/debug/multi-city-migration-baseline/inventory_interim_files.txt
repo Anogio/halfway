@@ -1,0 +1,4 @@
+backend/offline/data/interim/ingest_report.json
+backend/offline/data/interim/nodes.csv
+backend/offline/data/interim/routes_selected.csv
+backend/offline/data/interim/trips_weekday.csv

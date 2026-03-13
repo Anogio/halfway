@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "name": "graph_v2_weekday.json",
+      "sha256": "f74d011e26613a29cb484ed9cb62ad6b9e568dd9dd8d873792b4f013792eefa2",
+      "size_bytes": 11132556
+    },
+    {
+      "name": "nodes_v2.csv",
+      "sha256": "dbaecc7b66dc83b7c7ca13833eb2374e890719738aed7998a4434c0fa9cd9f15",
+      "size_bytes": 8761148
+    },
+    {
+      "name": "grid_cells_v2.csv",
+      "sha256": "12b1a396fd654097164fb2cb9d38fb1e802d076c82fd206467236edb039f8bd9",
+      "size_bytes": 1290678
+    },
+    {
+      "name": "grid_links_v2.csv",
+      "sha256": "63daee3582d2960d3ebca1cef181981bf7e511d29c106b7dacf751a028334211",
+      "size_bytes": 10345951
+    },
+    {
+      "name": "validation_v2.json",
+      "sha256": "de1810f44d5475a8931a7524c079da5fefa405a3e82ffdf00078db6bcc230cc7",
+      "size_bytes": 2333
+    }
+  ],
+  "build_timestamp_utc": "2026-03-12T21:42:19.670646+00:00",
+  "city": "london",
+  "config_hash": "3c4bf7184e0204b093c70db0e928f58a987dedc14f8555ecdf7890458da5656f",
+  "counts": {
+    "edges": 239580,
+    "nodes": 74615
+  },
+  "feed_info": {
+    "feed_end_date": "20261231",
+    "feed_lang": "en",
+    "feed_publisher_name": "Transport for London",
+    "feed_publisher_url": "https://tfl.gov.uk",
+    "feed_start_date": "20260213",
+    "feed_version": "london-source-v1"
+  },
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

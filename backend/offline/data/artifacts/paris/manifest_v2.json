@@ -1,0 +1,46 @@
+{
+  "artifacts": [
+    {
+      "name": "graph_v2_weekday.json",
+      "sha256": "941873b6e5c0bf28bf9d8a176f43174c117ffef3207bbf660b4db10e060ab01b",
+      "size_bytes": 13761873
+    },
+    {
+      "name": "nodes_v2.csv",
+      "sha256": "02536ce6250db4992d81f3e4d3c849c9e722b32ca44f87317833a3302a3f76ea",
+      "size_bytes": 11914101
+    },
+    {
+      "name": "grid_cells_v2.csv",
+      "sha256": "49ebeee860a5798af79bde3939b28127300ae474c5df7eef00c62080c0f9aa84",
+      "size_bytes": 3563914
+    },
+    {
+      "name": "grid_links_v2.csv",
+      "sha256": "d51e75211e2ab7ff3e51c6d495acfe5f6162c3ac8dde5df77153511877949856",
+      "size_bytes": 20652882
+    },
+    {
+      "name": "validation_v2.json",
+      "sha256": "e5988f695e6143560d06f74aa674fb4e4fa6730972887690296f800a5dac84af",
+      "size_bytes": 1537
+    }
+  ],
+  "build_timestamp_utc": "2026-03-12T21:28:59.671255+00:00",
+  "city": "paris",
+  "config_hash": "3c4bf7184e0204b093c70db0e928f58a987dedc14f8555ecdf7890458da5656f",
+  "counts": {
+    "edges": 416902,
+    "nodes": 111777
+  },
+  "feed_info": {
+    "feed_end_date": "20260328",
+    "feed_lang": "EN",
+    "feed_publisher_name": "ITO World",
+    "feed_publisher_url": "http://www.itoworld.com/",
+    "feed_start_date": "20260224",
+    "feed_version": "20260228_200147"
+  },
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}
