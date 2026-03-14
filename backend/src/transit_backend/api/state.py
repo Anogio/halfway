@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import gc
+import os
 from collections import OrderedDict
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from pathlib import Path
 from threading import Condition, Event, Lock, RLock, Thread
 from time import monotonic
 from typing import Any
 
+from transit_backend.api.cities import build_public_city_id, get_city_country_code
 from transit_backend.config.settings import get_city_artifacts_dir, load_backend_config
 from transit_backend.core.artifacts import RuntimeData, load_runtime_data
 from transit_backend.core.isochrones import GridTopology, infer_grid_topology
@@ -45,6 +48,13 @@ class OriginGridCache:
             self._rows.move_to_end(key)
             while len(self._rows) > self.max_entries:
                 self._rows.popitem(last=False)
+
+    def snapshot_stats(self) -> dict[str, int]:
+        with self._lock:
+            return {
+                "entries": len(self._rows),
+                "max_entries": self.max_entries,
+            }
 
 
 @dataclass(frozen=True)
@@ -106,6 +116,43 @@ class CityRuntimeManager:
                 for city_id, entry in self._entries.items()
                 if entry.loaded_state is not None
             )
+
+    def snapshot_debug_info(self, *, now: float | None = None) -> dict[str, object]:
+        current = monotonic() if now is None else float(now)
+        with self._condition:
+            cities: list[dict[str, object]] = []
+            loaded_city_ids: list[str] = []
+            for city_id, entry in sorted(self._entries.items()):
+                last_active_at = None if entry.last_active_at is None else float(entry.last_active_at)
+                idle_for_s = None
+                if last_active_at is not None:
+                    idle_for_s = round(max(0.0, current - last_active_at), 3)
+                runtime_snapshot = None
+                if entry.loaded_state is not None:
+                    loaded_city_ids.append(city_id)
+                    runtime_snapshot = _snapshot_city_runtime_state(entry.loaded_state)
+                cities.append(
+                    {
+                        "city_id": city_id,
+                        "label": entry.label,
+                        "loaded": entry.loaded_state is not None,
+                        "loading": entry.loading,
+                        "inflight_requests": entry.inflight_requests,
+                        "last_active_at": last_active_at,
+                        "idle_for_s": idle_for_s,
+                        "runtime": runtime_snapshot,
+                    }
+                )
+
+        return {
+            "snapshot_at_monotonic_s": round(current, 6),
+            "known_city_count": len(cities),
+            "loaded_city_count": len(loaded_city_ids),
+            "loaded_city_ids": loaded_city_ids,
+            "idle_ttl_s": self.idle_ttl_s,
+            "reaper_interval_s": self.reaper_interval_s,
+            "cities": cities,
+        }
 
     def unload_idle_cities(self, *, now: float | None = None) -> list[str]:
         unloaded: list[str] = []
@@ -306,6 +353,39 @@ def get_city_runtime_state(app_state: AppState, city_id: str) -> CityRuntimeStat
     return get_city_runtime_manager(app_state).get_loaded_city_state(city_id)
 
 
+def build_runtime_debug_snapshot(app_state: AppState) -> dict[str, object]:
+    config = app_state.get("config")
+    if config is None or not hasattr(config, "settings"):
+        raise RuntimeError("invalid server state")
+
+    settings = config.settings
+    manager_snapshot = get_city_runtime_manager(app_state).snapshot_debug_info()
+    cities_payload: list[dict[str, object]] = []
+    for city_snapshot in manager_snapshot["cities"]:
+        if not isinstance(city_snapshot, dict):
+            continue
+        city_id = city_snapshot.get("city_id")
+        if not isinstance(city_id, str):
+            continue
+        city_settings = settings.cities[city_id]
+        city_payload = dict(city_snapshot)
+        city_payload["public_city_id"] = build_public_city_id(city_id, city_settings)
+        city_payload["country_code"] = get_city_country_code(city_settings)
+        city_payload["configured_artifact_version"] = city_settings.artifact_version
+        city_payload["artifact_dir"] = _safe_city_artifacts_dir(config, city_id)
+        cities_payload.append(city_payload)
+
+    return {
+        "manager": {
+            key: value
+            for key, value in manager_snapshot.items()
+            if key != "cities"
+        },
+        "process": _snapshot_process_info(),
+        "cities": cities_payload,
+    }
+
+
 def origin_cache_key(
     runtime: RuntimeData,
     *,
@@ -339,3 +419,95 @@ def _build_runtime_loader(config: Any, *, radius_m: float) -> RuntimeLoader:
         )
 
     return _load
+
+
+def _snapshot_city_runtime_state(city_state: CityRuntimeState) -> dict[str, object]:
+    runtime = city_state.runtime
+    cache_stats = city_state.origin_grid_cache.snapshot_stats()
+    return {
+        "runtime_version": runtime.version,
+        "profile": runtime.profile,
+        "node_count": len(runtime.nodes),
+        "edge_count": len(runtime.targets),
+        "grid_cell_count": len(runtime.grid_cells),
+        "grid_link_cell_count": len(runtime.grid_links),
+        "grid_link_count": sum(len(links) for links in runtime.grid_links.values()),
+        "route_count": len(runtime.route_labels),
+        "origin_grid_cache_entries": cache_stats["entries"],
+        "origin_grid_cache_max_entries": cache_stats["max_entries"],
+        "manifest": _summarize_runtime_manifest(runtime.metadata),
+    }
+
+
+def _summarize_runtime_manifest(metadata: dict[str, object]) -> dict[str, object] | None:
+    if not metadata:
+        return None
+
+    artifacts = metadata.get("artifacts")
+    artifact_count = 0
+    artifact_total_size_bytes = 0
+    if isinstance(artifacts, list):
+        artifact_count = len(artifacts)
+        for artifact in artifacts:
+            if not isinstance(artifact, dict):
+                continue
+            size_bytes = artifact.get("size_bytes")
+            if isinstance(size_bytes, int):
+                artifact_total_size_bytes += size_bytes
+
+    counts = metadata.get("counts")
+    counts_payload = None
+    if isinstance(counts, dict):
+        counts_payload = {
+            str(key): int(value)
+            for key, value in counts.items()
+            if isinstance(value, int)
+        }
+
+    return {
+        "version": metadata.get("version"),
+        "profile": metadata.get("profile"),
+        "build_timestamp_utc": metadata.get("build_timestamp_utc"),
+        "config_hash": metadata.get("config_hash"),
+        "city": metadata.get("city"),
+        "artifact_count": artifact_count,
+        "artifact_total_size_bytes": artifact_total_size_bytes,
+        "counts": counts_payload,
+    }
+
+
+def _safe_city_artifacts_dir(config: Any, city_id: str) -> str | None:
+    if not hasattr(config, "paths"):
+        return None
+    try:
+        return str(get_city_artifacts_dir(config, city_id))
+    except Exception:
+        return None
+
+
+def _snapshot_process_info() -> dict[str, object]:
+    rss_bytes, rss_source = _read_process_rss_bytes()
+    return {
+        "pid": os.getpid(),
+        "current_rss_bytes": rss_bytes,
+        "current_rss_source": rss_source,
+    }
+
+
+def _read_process_rss_bytes() -> tuple[int | None, str | None]:
+    status_path = Path("/proc/self/status")
+    if not status_path.exists():
+        return None, None
+
+    try:
+        for line in status_path.read_text(encoding="utf-8").splitlines():
+            if not line.startswith("VmRSS:"):
+                continue
+            parts = line.split()
+            if len(parts) < 2:
+                return None, None
+            return int(parts[1]) * 1024, "procfs_status"
+    except (OSError, ValueError):
+        return None, None
+
+    return None, None

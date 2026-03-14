@@ -29,6 +29,7 @@ from transit_backend.api.routing_handlers import (
     build_wakeup_response,
 )
 from transit_backend.api.state import load_app_state, start_app_runtime, stop_app_runtime
+from transit_backend.api.state import build_runtime_debug_snapshot
 
 __all__ = [
     "app",
@@ -109,6 +110,11 @@ def get_metadata(request: Request) -> dict[str, object]:
     app_state = request.app.state.app_state
     cfg = app_state["config"]
     return build_metadata_payload(cfg.settings)
+
+
+@app.get("/debug/assets")
+def get_debug_assets(request: Request) -> dict[str, object]:
+    return build_runtime_debug_snapshot(request.app.state.app_state)
 
 
 @app.post("/multi_isochrones")

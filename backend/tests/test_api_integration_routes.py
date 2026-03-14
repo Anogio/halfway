@@ -35,6 +35,75 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(len(city["bbox"]), 4)
         self.assertEqual(self.load_calls, [])
 
+    def test_debug_assets_is_read_only_for_unloaded_city(self) -> None:
+        manager = server.APP_STATE["city_runtime_manager"]
+
+        response = self.client.get("/debug/assets")
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+
+        self.assertEqual(sorted(payload.keys()), ["cities", "manager", "process"])
+        self.assertEqual(payload["manager"]["known_city_count"], 1)
+        self.assertEqual(payload["manager"]["loaded_city_count"], 0)
+        self.assertEqual(payload["manager"]["loaded_city_ids"], [])
+        self.assertEqual(payload["process"]["pid"] > 0, True)
+        self.assertIn("current_rss_bytes", payload["process"])
+        self.assertEqual(len(payload["cities"]), 1)
+        self.assertEqual(payload["cities"][0]["city_id"], "paris")
+        self.assertEqual(payload["cities"][0]["public_city_id"], "paris_fr")
+        self.assertEqual(payload["cities"][0]["configured_artifact_version"], "vtest")
+        self.assertEqual(payload["cities"][0]["loaded"], False)
+        self.assertEqual(payload["cities"][0]["loading"], False)
+        self.assertEqual(payload["cities"][0]["inflight_requests"], 0)
+        self.assertIsNone(payload["cities"][0]["last_active_at"])
+        self.assertIsNone(payload["cities"][0]["idle_for_s"])
+        self.assertIsNone(payload["cities"][0]["runtime"])
+        self.assertEqual(manager._entries["paris"].last_active_at, None)
+        self.assertEqual(self.load_calls, [])
+
+    def test_debug_assets_reports_loaded_runtime_without_refreshing_last_active(self) -> None:
+        manager = server.APP_STATE["city_runtime_manager"]
+
+        warm = self.client.post(
+            "/multi_isochrones",
+            json={"city": "paris_fr", "origins": [{"id": "origin-1", "lat": 48.8566, "lon": 2.3522}]},
+        )
+        self.assertEqual(warm.status_code, 200)
+        loaded_state = manager.get_loaded_city_state("paris")
+        self.assertIsNotNone(loaded_state)
+        cache_entries_before = loaded_state.origin_grid_cache.snapshot_stats()["entries"]
+        loaded_state.origin_grid_cache.put(("cache",), {1: 120}, 2)
+        cache_entries_after = loaded_state.origin_grid_cache.snapshot_stats()["entries"]
+        before_last_active_at = manager._entries["paris"].last_active_at
+
+        response = self.client.get("/debug/assets")
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        city = payload["cities"][0]
+        runtime = city["runtime"]
+
+        self.assertEqual(manager._entries["paris"].last_active_at, before_last_active_at)
+        self.assertEqual(payload["manager"]["loaded_city_count"], 1)
+        self.assertEqual(payload["manager"]["loaded_city_ids"], ["paris"])
+        self.assertEqual(city["loaded"], True)
+        self.assertEqual(city["loading"], False)
+        self.assertEqual(city["inflight_requests"], 0)
+        self.assertEqual(city["last_active_at"], before_last_active_at)
+        self.assertIsInstance(city["idle_for_s"], float)
+        self.assertEqual(runtime["runtime_version"], "vtest")
+        self.assertEqual(runtime["profile"], "weekday_non_holiday")
+        self.assertEqual(runtime["node_count"], 2)
+        self.assertEqual(runtime["edge_count"], 1)
+        self.assertEqual(runtime["grid_cell_count"], 2)
+        self.assertEqual(runtime["grid_link_cell_count"], 2)
+        self.assertEqual(runtime["grid_link_count"], 2)
+        self.assertEqual(runtime["route_count"], 1)
+        self.assertEqual(runtime["origin_grid_cache_entries"], cache_entries_after)
+        self.assertGreaterEqual(cache_entries_after, cache_entries_before)
+        self.assertEqual(runtime["origin_grid_cache_max_entries"], 128)
+        self.assertEqual(runtime["manifest"]["artifact_count"], 0)
+        self.assertEqual(self.load_calls, ["paris"])
+
     def test_multi_isochrones_and_multi_path(self) -> None:
         multi_isochrones = self.client.post(
             "/multi_isochrones",
