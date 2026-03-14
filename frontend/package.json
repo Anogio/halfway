@@ -17,9 +17,12 @@
     "test": "node --test",
     "e2e": "playwright test",
     "e2e:existing": "PLAYWRIGHT_BASE_URL=http://localhost:3000 PW_SKIP_WEBSERVER=1 playwright test",
+    "e2e:local": "./scripts/run-e2e-local.sh",
+    "e2e:app:local": "./scripts/run-e2e-local.sh e2e/heatmap.spec.ts",
     "e2e:headed": "playwright test --headed",
     "e2e:map": "playwright test --project=map-chromium",
-    "e2e:map:existing": "PLAYWRIGHT_BASE_URL=http://localhost:3000 PW_SKIP_WEBSERVER=1 playwright test --project=map-chromium"
+    "e2e:map:existing": "PLAYWRIGHT_BASE_URL=http://localhost:3000 PW_SKIP_WEBSERVER=1 playwright test --project=map-chromium",
+    "e2e:map:local": "./scripts/run-e2e-local.sh e2e/heatmap-map.spec.ts --project=map-chromium"
   },
   "dependencies": {
     "maplibre-gl": "^5.20.1",

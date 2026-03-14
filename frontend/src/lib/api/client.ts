@@ -39,6 +39,19 @@ export async function fetchMetadata(): Promise<MetadataResponse> {
   return fetchJson<MetadataResponse>(`${BACKEND_URL}/metadata`, { method: "GET" }, "Metadata request");
 }
 
+export async function fetchWakeup(city: string): Promise<void> {
+  const cityId = normalizeCity(city);
+  await fetchJson<{ ok: boolean }>(
+    `${BACKEND_URL}/wakeup`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ city: cityId })
+    },
+    "Wakeup request"
+  );
+}
+
 export async function fetchMultiIsochrones(
   city: string,
   origins: MultiOrigin[],

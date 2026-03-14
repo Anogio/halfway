@@ -17,6 +17,7 @@ class ApiGeocodeIntegrationTest(ApiIntegrationTestCase):
         response = self.client.get("/geocode", params={"city": "paris_fr", "q": "ab"})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json(), {"results": []})
+        self.assertEqual(self.load_calls, [])
 
     def test_geocode_normalizes_provider_results(self) -> None:
         call_log: list[tuple[str, dict[str, object], dict[str, str]]] = []
@@ -111,6 +112,7 @@ class ApiGeocodeIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(call_log[0][1]["viewbox"], "1.4472,48.1201,3.5590,49.2415")
         self.assertEqual(call_log[0][1]["bounded"], "1")
         self.assertEqual(call_log[0][2]["User-Agent"], server.GEOCODE_USER_AGENT)
+        self.assertEqual(self.load_calls, [])
 
     def test_geocode_returns_502_on_provider_error(self) -> None:
         class FailingAsyncClient:
@@ -136,3 +138,4 @@ class ApiGeocodeIntegrationTest(ApiIntegrationTestCase):
 
         self.assertEqual(response.status_code, 502)
         self.assertEqual(response.json(), {"error": "geocoding provider unavailable"})
+        self.assertEqual(self.load_calls, [])

@@ -6,12 +6,14 @@ from transit_backend.api.cities import resolve_internal_city_id
 from transit_backend.api.contracts import (
     InvalidIsochroneRequest,
     InvalidPathRequest,
+    InvalidWakeupRequest,
     parse_multi_isochrones_request,
     parse_multi_path_request,
+    parse_wakeup_request,
 )
 from transit_backend.api.state import (
     CityRuntimeState,
-    get_city_runtime_state,
+    get_city_runtime_manager,
     origin_cache_key,
 )
 from transit_backend.core.routing import (
@@ -34,13 +36,6 @@ def _resolve_internal_city_id(app_state: AppState, request_city_id: str) -> str:
     return city_id
 
 
-def _resolve_city_state(app_state: AppState, city_id: str) -> CityRuntimeState:
-    city_state = get_city_runtime_state(app_state, city_id)
-    if city_state is None:
-        raise HTTPException(status_code=400, detail="unknown city")
-    return city_state
-
-
 def build_multi_isochrones_response(
     app_state: AppState,
     payload: dict[str, object],
@@ -51,8 +46,9 @@ def build_multi_isochrones_response(
         raise HTTPException(status_code=400, detail="invalid request body") from exc
 
     city_id = _resolve_internal_city_id(app_state, city_id)
-    city_state = _resolve_city_state(app_state, city_id)
-    return compute_multi_isochrones_response(app_state, city_state, origins, include_stats=debug)
+    manager = get_city_runtime_manager(app_state)
+    with manager.use_city(city_id) as city_state:
+        return compute_multi_isochrones_response(app_state, city_state, origins, include_stats=debug)
 
 
 def build_multi_path_response(app_state: AppState, payload: dict[str, object]) -> dict[str, object]:
@@ -63,20 +59,33 @@ def build_multi_path_response(app_state: AppState, payload: dict[str, object]) -
         raise HTTPException(status_code=400, detail="invalid request body") from exc
 
     city_id = _resolve_internal_city_id(app_state, city_id)
-    city_state = _resolve_city_state(app_state, city_id)
-    return compute_multi_path(
-        city_state.runtime,
-        city_state.spatial,
-        origins=origins,
-        destination_lat=destination_lat,
-        destination_lon=destination_lon,
-        first_mile_radius_m=params["first_mile_radius_m"],
-        first_mile_fallback_k=params["first_mile_fallback_k"],
-        max_seed_nodes=params["max_seed_nodes"],
-        walk_speed_mps=params["walk_speed_mps"],
-        max_time_s=int(params["max_time_s"]),
-        include_stats=debug,
-    )
+    manager = get_city_runtime_manager(app_state)
+    with manager.use_city(city_id) as city_state:
+        return compute_multi_path(
+            city_state.runtime,
+            city_state.spatial,
+            origins=origins,
+            destination_lat=destination_lat,
+            destination_lon=destination_lon,
+            first_mile_radius_m=params["first_mile_radius_m"],
+            first_mile_fallback_k=params["first_mile_fallback_k"],
+            max_seed_nodes=params["max_seed_nodes"],
+            walk_speed_mps=params["walk_speed_mps"],
+            max_time_s=int(params["max_time_s"]),
+            include_stats=debug,
+        )
+
+
+def build_wakeup_response(app_state: AppState, payload: dict[str, object]) -> dict[str, object]:
+    try:
+        city_id = parse_wakeup_request(payload)
+    except InvalidWakeupRequest as exc:
+        raise HTTPException(status_code=400, detail="invalid request body") from exc
+
+    city_id = _resolve_internal_city_id(app_state, city_id)
+    manager = get_city_runtime_manager(app_state)
+    manager.trigger_wakeup(city_id)
+    return {"ok": True}
 
 
 def compute_multi_isochrones_response(

@@ -1,20 +1,25 @@
 from __future__ import annotations
 
+from types import SimpleNamespace
+
 from transit_backend.api import server
-from transit_backend.api.state import CityRuntimeState, OriginGridCache
+from transit_backend.api.state import CityRuntimeState, OriginGridCache, build_app_state
 from transit_backend.core.artifacts import GridCell, Node, RuntimeData
 from transit_backend.core.isochrones import infer_grid_topology
 from transit_backend.core.routing import build_spatial_index
 
 from api_integration_base import ApiIntegrationTestCase
+from helpers import make_settings
 
 
 class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
     def test_health_and_metadata(self) -> None:
+        self.assertEqual(server.APP_STATE["city_runtime_manager"].snapshot_loaded_city_ids(), [])
         health = self.client.get("/health")
         self.assertEqual(health.status_code, 200)
         self.assertEqual(health.json()["ok"], True)
         self.assertEqual(health.json()["cities"], ["paris_fr"])
+        self.assertEqual(self.load_calls, [])
 
         metadata = self.client.get("/metadata")
         self.assertEqual(metadata.status_code, 200)
@@ -28,6 +33,7 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(city["country_code"], "fr")
         self.assertEqual(len(city["default_view"]), 3)
         self.assertEqual(len(city["bbox"]), 4)
+        self.assertEqual(self.load_calls, [])
 
     def test_multi_isochrones_and_multi_path(self) -> None:
         multi_isochrones = self.client.post(
@@ -44,6 +50,7 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         multi_iso_payload = multi_isochrones.json()
         self.assertNotIn("stats", multi_iso_payload)
         self.assertEqual(multi_iso_payload["feature_collection"]["type"], "FeatureCollection")
+        self.assertEqual(self.load_calls, ["paris"])
 
         multi_path = self.client.post(
             "/multi_path",
@@ -61,6 +68,7 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(len(multi_path_payload["paths"]), 2)
         self.assertEqual(multi_path_payload["paths"][0]["origin_id"], "origin-1")
         self.assertNotIn("stats", multi_path_payload["paths"][0])
+        self.assertEqual(self.load_calls, ["paris"])
 
     def test_multi_routes_include_stats_when_debug_enabled(self) -> None:
         multi_isochrones = self.client.post(
@@ -149,7 +157,10 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
             topology=infer_grid_topology(runtime),
             origin_grid_cache=OriginGridCache(max_entries=128),
         )
-        server.APP_STATE["cities_by_id"]["paris"] = city_state
+        server.APP_STATE = build_app_state(
+            SimpleNamespace(settings=make_settings()),
+            runtime_loader=lambda _city_id: city_state,
+        )
         server.app.state.app_state = server.APP_STATE
 
         response = self.client.post(
@@ -166,6 +177,84 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(len(graph_segments), 1)
         self.assertEqual(graph_segments[0]["route_label"], "Path Runtime")
 
+    def test_wakeup_loads_city_without_blocking_followup_compute(self) -> None:
+        manager = server.APP_STATE["city_runtime_manager"]
+
+        response = self.client.post("/wakeup", json={"city": "paris_fr"})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"ok": True})
+        self.assertTrue(self.wait_until(lambda: manager.get_loaded_city_state("paris") is not None))
+        self.assertEqual(self.load_calls, ["paris"])
+
+        compute = self.client.post(
+            "/multi_isochrones",
+            json={"city": "paris_fr", "origins": [{"id": "origin-1", "lat": 48.8566, "lon": 2.3522}]},
+        )
+        self.assertEqual(compute.status_code, 200)
+        self.assertEqual(self.load_calls, ["paris"])
+
+    def test_wakeup_is_idempotent_for_loaded_or_loading_city(self) -> None:
+        manager = server.APP_STATE["city_runtime_manager"]
+
+        first = self.client.post("/wakeup", json={"city": "paris_fr"})
+        self.assertEqual(first.status_code, 200)
+        self.assertTrue(self.wait_until(lambda: manager.get_loaded_city_state("paris") is not None))
+        self.assertEqual(self.load_calls, ["paris"])
+
+        second = self.client.post("/wakeup", json={"city": "paris_fr"})
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(self.load_calls, ["paris"])
+
+    def test_runtime_manager_reaps_idle_city_and_reloads_it(self) -> None:
+        manager = server.APP_STATE["city_runtime_manager"]
+
+        first = self.client.post(
+            "/multi_isochrones",
+            json={"city": "paris_fr", "origins": [{"id": "origin-1", "lat": 48.8566, "lon": 2.3522}]},
+        )
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(self.load_calls, ["paris"])
+        self.assertEqual(manager.snapshot_loaded_city_ids(), ["paris"])
+        loaded_state = manager.get_loaded_city_state("paris")
+        self.assertIsNotNone(loaded_state)
+        loaded_state.origin_grid_cache.put(("cache",), {1: 120}, 2)
+        last_active_at = manager._entries["paris"].last_active_at
+        self.assertIsNotNone(last_active_at)
+        self.assertEqual(manager.unload_idle_cities(now=float(last_active_at) + 599.0), [])
+        self.assertEqual(manager.unload_idle_cities(now=float(last_active_at) + 601.0), ["paris"])
+        self.assertEqual(manager.snapshot_loaded_city_ids(), [])
+
+        second = self.client.post(
+            "/multi_isochrones",
+            json={"city": "paris_fr", "origins": [{"id": "origin-2", "lat": 48.86, "lon": 2.36}]},
+        )
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(self.load_calls, ["paris", "paris"])
+        reloaded_state = manager.get_loaded_city_state("paris")
+        self.assertIsNotNone(reloaded_state)
+        self.assertIsNone(reloaded_state.origin_grid_cache.get(("cache",)))
+
+    def test_wakeup_refreshes_idle_ttl(self) -> None:
+        manager = server.APP_STATE["city_runtime_manager"]
+
+        first = self.client.post(
+            "/multi_isochrones",
+            json={"city": "paris_fr", "origins": [{"id": "origin-1", "lat": 48.8566, "lon": 2.3522}]},
+        )
+        self.assertEqual(first.status_code, 200)
+        initial_active_at = manager._entries["paris"].last_active_at
+        self.assertIsNotNone(initial_active_at)
+
+        wakeup = self.client.post("/wakeup", json={"city": "paris_fr"})
+        self.assertEqual(wakeup.status_code, 200)
+        refreshed_active_at = manager._entries["paris"].last_active_at
+        self.assertIsNotNone(refreshed_active_at)
+        self.assertGreaterEqual(float(refreshed_active_at), float(initial_active_at))
+
+        self.assertEqual(manager.unload_idle_cities(now=float(refreshed_active_at) + 599.0), [])
+        self.assertEqual(manager.unload_idle_cities(now=float(refreshed_active_at) + 601.0), ["paris"])
+        self.assertEqual(manager.snapshot_loaded_city_ids(), [])
+
     def test_server_rejects_missing_or_unknown_city(self) -> None:
         response_missing = self.client.post(
             "/multi_isochrones",
@@ -178,6 +267,12 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
             json={"city": "unknown", "origins": [{"id": "a", "lat": 48.8, "lon": 2.3}]},
         )
         self.assertEqual(response_unknown.status_code, 400)
+
+        wakeup_missing = self.client.post("/wakeup", json={})
+        self.assertEqual(wakeup_missing.status_code, 400)
+
+        wakeup_unknown = self.client.post("/wakeup", json={"city": "unknown"})
+        self.assertEqual(wakeup_unknown.status_code, 400)
 
     def test_removed_single_origin_endpoints_return_404(self) -> None:
         response_heatmap = self.client.post(

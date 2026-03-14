@@ -6,7 +6,6 @@ import httpx
 from fastapi import APIRouter, HTTPException, Query, Request
 
 from transit_backend.api.cities import resolve_internal_city_id
-from transit_backend.api.state import get_city_runtime_state
 
 router = APIRouter()
 
@@ -122,10 +121,6 @@ def _resolve_city_settings(request: Request, city: str) -> tuple[str, object]:
 
     city_cfg = cfg.settings.cities.get(city_id)
     if city_cfg is None:
-        raise HTTPException(status_code=400, detail="unknown city")
-
-    # Also ensure city runtime is loaded for consistency.
-    if get_city_runtime_state(app_state, city_id) is None:
         raise HTTPException(status_code=400, detail="unknown city")
 
     return city_id, city_cfg

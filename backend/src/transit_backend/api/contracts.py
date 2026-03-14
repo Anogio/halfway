@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Mapping
+from typing import Any
 
 from transit_shared.settings import AppSettings
 
@@ -19,14 +19,17 @@ class InvalidIsochroneRequest(ValueError):
     """Raised when request payload is invalid for /multi_isochrones."""
 
 
+class InvalidWakeupRequest(ValueError):
+    """Raised when request payload is invalid for /wakeup."""
+
+
 MAX_MULTI_ORIGINS = 10
 
 
-def build_health_payload(cities_by_id: Mapping[str, object], settings: AppSettings) -> dict[str, Any]:
+def build_health_payload(settings: AppSettings) -> dict[str, Any]:
     public_city_ids = sorted(
         build_public_city_id(city_id, city)
         for city_id, city in settings.cities.items()
-        if city_id in cities_by_id
     )
     return {
         "ok": True,
@@ -170,3 +173,7 @@ def parse_multi_path_request(
         error_type=InvalidPathRequest,
     )
     return city, origins, destination_lat, destination_lon, debug
+
+
+def parse_wakeup_request(payload: dict[str, Any]) -> str:
+    return _parse_city(payload, InvalidWakeupRequest)

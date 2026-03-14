@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
@@ -25,8 +26,9 @@ from transit_backend.api.geocoding import (
 from transit_backend.api.routing_handlers import (
     build_multi_isochrones_response,
     build_multi_path_response,
+    build_wakeup_response,
 )
-from transit_backend.api.state import load_app_state
+from transit_backend.api.state import load_app_state, start_app_runtime, stop_app_runtime
 
 __all__ = [
     "app",
@@ -57,8 +59,21 @@ def require_cors_settings() -> tuple[list[str], str | None]:
     raise RuntimeError("CORS_ALLOW_ORIGIN or CORS_ALLOW_ORIGIN_REGEX must be set")
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    app_state = getattr(app.state, "app_state", None)
+    if isinstance(app_state, dict):
+        start_app_runtime(app_state)
+    try:
+        yield
+    finally:
+        app_state = getattr(app.state, "app_state", None)
+        if isinstance(app_state, dict):
+            stop_app_runtime(app_state)
+
+
 cors_origins, cors_origin_regex = require_cors_settings()
-app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
+app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None, lifespan=lifespan)
 app.state.app_state = APP_STATE
 app.add_middleware(
     CORSMiddleware,
@@ -83,27 +98,35 @@ async def _request_validation_handler(_request: Request, _exc: RequestValidation
 
 
 @app.get("/health")
-def get_health() -> dict[str, object]:
-    cfg = APP_STATE["config"]
-    return build_health_payload(APP_STATE["cities_by_id"], cfg.settings)
+def get_health(request: Request) -> dict[str, object]:
+    app_state = request.app.state.app_state
+    cfg = app_state["config"]
+    return build_health_payload(cfg.settings)
 
 
 @app.get("/metadata")
-def get_metadata() -> dict[str, object]:
-    cfg = APP_STATE["config"]
+def get_metadata(request: Request) -> dict[str, object]:
+    app_state = request.app.state.app_state
+    cfg = app_state["config"]
     return build_metadata_payload(cfg.settings)
 
 
 @app.post("/multi_isochrones")
 async def post_multi_isochrones(request: Request) -> dict[str, object]:
     payload = await _read_payload(request)
-    return build_multi_isochrones_response(APP_STATE, payload)
+    return build_multi_isochrones_response(request.app.state.app_state, payload)
 
 
 @app.post("/multi_path")
 async def post_multi_path(request: Request) -> dict[str, object]:
     payload = await _read_payload(request)
-    return build_multi_path_response(APP_STATE, payload)
+    return build_multi_path_response(request.app.state.app_state, payload)
+
+
+@app.post("/wakeup")
+async def post_wakeup(request: Request) -> dict[str, object]:
+    payload = await _read_payload(request)
+    return build_wakeup_response(request.app.state.app_state, payload)
 
 
 async def _read_payload(request: Request) -> dict[str, object]:

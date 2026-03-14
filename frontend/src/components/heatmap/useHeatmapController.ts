@@ -1,6 +1,12 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { CityMetadata, GeocodeResult, MultiIsochroneResponse, MultiPathItemResponse } from "@/lib/api";
+import {
+  fetchWakeup,
+  type CityMetadata,
+  type GeocodeResult,
+  type MultiIsochroneResponse,
+  type MultiPathItemResponse
+} from "@/lib/api";
 import { MAX_ORIGINS, SEARCH_MIN_CHARS } from "@/components/heatmap/constants";
 import { isOnboardingSkippedByQuery } from "@/components/heatmap/queryParams";
 import type {
@@ -180,6 +186,13 @@ export function useHeatmapController(): HeatmapController {
     originsRef,
     resetSearch
   ]);
+
+  useEffect(() => {
+    if (!activeCityId) {
+      return;
+    }
+    void fetchWakeup(activeCityId).catch(() => {});
+  }, [activeCityId]);
 
   useHeatmapEffects({
     origins,

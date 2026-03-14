@@ -84,15 +84,12 @@ def make_settings_with_madrid():
 
 class ApiContractHealthMetadataTest(unittest.TestCase):
     def test_health_payload_schema(self) -> None:
-        payload = build_health_payload({"paris": object()}, make_settings())
+        payload = build_health_payload(make_settings())
         self.assertEqual(payload["ok"], True)
         self.assertEqual(payload["cities"], ["paris_fr"])
         self.assertEqual(payload["cities_count"], 1)
 
-        payload = build_health_payload(
-            {"paris": object(), "london": object()},
-            make_settings_with_london(),
-        )
+        payload = build_health_payload(make_settings_with_london())
         self.assertEqual(payload["cities"], ["london_uk", "paris_fr"])
         self.assertEqual(payload["cities_count"], 2)
 
@@ -112,6 +109,6 @@ class ApiContractHealthMetadataTest(unittest.TestCase):
         self.assertEqual(len(first_city["bbox"]), 4)
 
     def test_health_payload_uses_spanish_public_city_suffix(self) -> None:
-        payload = build_health_payload({"paris": object(), "madrid": object()}, make_settings_with_madrid())
+        payload = build_health_payload(make_settings_with_madrid())
         self.assertEqual(payload["cities"], ["madrid_es", "paris_fr"])
         self.assertEqual(payload["cities_count"], 2)

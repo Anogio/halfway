@@ -55,11 +55,52 @@ test.describe("Halfway app", () => {
     await expect(page.getByTestId("city-gate-option-paris_fr")).toBeVisible();
   });
 
+  test("warms the selected city when choosing it from the gate", async ({ page }) => {
+    const wakeupRequests: string[] = [];
+    await page.route("**/wakeup", async (route) => {
+      wakeupRequests.push(route.request().postData() ?? "");
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true })
+      });
+    });
+
+    await page.goto(ENGLISH_ROUTE_NO_CITY);
+    await page.getByTestId("city-gate-option-paris_fr").click();
+
+    await expect(page.getByRole("dialog", { name: "Initialize meeting points" })).toBeVisible();
+    await expect
+      .poll(() => wakeupRequests.length, { timeout: 10000 })
+      .toBe(1);
+    expect(JSON.parse(wakeupRequests[0])).toEqual({ city: "paris_fr" });
+  });
+
   test("invalid city preset falls back to city gate", async ({ page }) => {
     await page.goto("/?skipOnboarding=1&lang=en&city=unknown");
 
     await expect(page.getByRole("dialog", { name: "Choose your city" })).toBeVisible();
     await expect(page.getByTestId("city-gate-option-paris_fr")).toBeVisible();
+  });
+
+  test("warms the preset city on startup", async ({ page }) => {
+    const wakeupRequests: string[] = [];
+    await page.route("**/wakeup", async (route) => {
+      wakeupRequests.push(route.request().postData() ?? "");
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ ok: true })
+      });
+    });
+
+    await page.goto(ENGLISH_APP_ROUTE);
+
+    await expect(page.getByLabel("Map point details")).toHaveCount(1);
+    await expect
+      .poll(() => wakeupRequests.length, { timeout: 10000 })
+      .toBe(1);
+    expect(JSON.parse(wakeupRequests[0])).toEqual({ city: "paris_fr" });
   });
 
   test("loads homepage with inspect dock and no controls panel", async ({ page }) => {
