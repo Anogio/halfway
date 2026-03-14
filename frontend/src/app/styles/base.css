@@ -118,6 +118,7 @@ body {
   font-weight: 800;
   line-height: 1;
   cursor: pointer;
+  touch-action: manipulation;
   box-shadow: 0 10px 24px rgba(28, 40, 53, 0.2);
 }
 
@@ -170,6 +171,7 @@ body {
   font-weight: 700;
   text-align: left;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .language-switcher-option:first-child,
@@ -177,9 +179,11 @@ body {
   border-top: 0;
 }
 
-.language-switcher-option:hover,
-.city-switcher-option:hover {
-  background: rgba(237, 241, 246, 0.75);
+@media (hover: hover) and (pointer: fine) {
+  .language-switcher-option:hover,
+  .city-switcher-option:hover {
+    background: rgba(237, 241, 246, 0.75);
+  }
 }
 
 .language-switcher-option.selected,

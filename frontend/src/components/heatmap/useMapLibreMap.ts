@@ -71,6 +71,7 @@ export function useMapLibreMap({
   const inspectPopupRef = useRef<MapLibrePopup | null>(null);
   const isochronePopupRef = useRef<MapLibrePopup | null>(null);
   const isochronePopupTimeoutRef = useRef<number | null>(null);
+  const isochroneTapPreviewActiveRef = useRef(false);
   const defaultLat = defaultView?.[0] ?? null;
   const defaultLon = defaultView?.[1] ?? null;
   const defaultZoom = defaultView?.[2] ?? null;
@@ -162,12 +163,20 @@ export function useMapLibreMap({
             bucketLabelFormatterRef,
             isochronePopupRef,
             isochronePopupTimeoutRef,
+            isochroneTapPreviewActiveRef,
             event
           );
         });
         map.on("mouseleave", ISOCHRONE_FILL_LAYER_ID, () => {
           map.getCanvas().style.cursor = "";
-          clearIsochronePopup(isochronePopupRef, isochronePopupTimeoutRef);
+          if (isochroneTapPreviewActiveRef.current) {
+            return;
+          }
+          clearIsochronePopup(
+            isochronePopupRef,
+            isochronePopupTimeoutRef,
+            isochroneTapPreviewActiveRef
+          );
         });
         updateGeoJsonSource(
           map,
@@ -197,6 +206,7 @@ export function useMapLibreMap({
           bucketLabelFormatterRef,
           isochronePopupRef,
           isochronePopupTimeoutRef,
+          isochroneTapPreviewActiveRef,
           onMapPointClickRef,
           event
         );
@@ -217,7 +227,11 @@ export function useMapLibreMap({
 
     return () => {
       mounted = false;
-      clearIsochronePopup(isochronePopupRef, isochronePopupTimeoutRef);
+      clearIsochronePopup(
+        isochronePopupRef,
+        isochronePopupTimeoutRef,
+        isochroneTapPreviewActiveRef
+      );
       isochronePopupRef.current = null;
       inspectPopupRef.current?.remove();
       inspectPopupRef.current = null;

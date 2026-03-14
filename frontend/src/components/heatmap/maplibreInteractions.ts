@@ -15,8 +15,30 @@ export type BucketLabelFormatterRef = MutableRefObject<
   (minMinutes: number, maxMinutes: number) => string
 >;
 
+const DESKTOP_CLICK_PREVIEW_MS = 1200;
+const TOUCH_TAP_PREVIEW_MS = 3000;
+
 function popupCoordinates(lngLat: { lng: number; lat: number }): LngLatLike {
   return [Number(lngLat.lng.toFixed(5)), Number(lngLat.lat.toFixed(5))];
+}
+
+function isTouchInteraction(originalEvent?: Event): boolean {
+  if (!originalEvent) {
+    return false;
+  }
+
+  if (typeof TouchEvent !== "undefined" && originalEvent instanceof TouchEvent) {
+    return true;
+  }
+
+  if (typeof PointerEvent !== "undefined" && originalEvent instanceof PointerEvent) {
+    return originalEvent.pointerType === "touch";
+  }
+
+  const sourceCapabilities = (originalEvent as MouseEvent & {
+    sourceCapabilities?: { firesTouchEvents?: boolean };
+  }).sourceCapabilities;
+  return sourceCapabilities?.firesTouchEvents === true;
 }
 
 function featureBucketLabel(
@@ -53,11 +75,15 @@ function ensureIsochronePopup(
 
 export function clearIsochronePopup(
   popupRef: MutableRefObject<MapLibrePopup | null>,
-  popupTimeoutRef: MutableRefObject<number | null>
+  popupTimeoutRef: MutableRefObject<number | null>,
+  tapPreviewActiveRef?: MutableRefObject<boolean>
 ) {
   if (popupTimeoutRef.current !== null) {
     window.clearTimeout(popupTimeoutRef.current);
     popupTimeoutRef.current = null;
+  }
+  if (tapPreviewActiveRef) {
+    tapPreviewActiveRef.current = false;
   }
   popupRef.current?.remove();
 }
@@ -123,8 +149,18 @@ export function handleIsochroneHover(
   bucketLabelFormatterRef: BucketLabelFormatterRef,
   popupRef: MutableRefObject<MapLibrePopup | null>,
   popupTimeoutRef: MutableRefObject<number | null>,
-  event: { features?: object[]; point: { x: number; y: number }; lngLat: { lng: number; lat: number } }
+  tapPreviewActiveRef: MutableRefObject<boolean>,
+  event: {
+    features?: object[];
+    point: { x: number; y: number };
+    lngLat: { lng: number; lat: number };
+    originalEvent?: Event;
+  }
 ) {
+  if (tapPreviewActiveRef.current || isTouchInteraction(event.originalEvent)) {
+    return;
+  }
+
   const hoveredFeature =
     (event.features?.[0] as Feature<MultiPolygon, GeoJsonProperties> | undefined) ??
     (map.queryRenderedFeatures([event.point.x, event.point.y], {
@@ -133,7 +169,7 @@ export function handleIsochroneHover(
 
   const bucket = featureBucketLabel(hoveredFeature, bucketLabelFormatterRef);
   if (!bucket) {
-    clearIsochronePopup(popupRef, popupTimeoutRef);
+    clearIsochronePopup(popupRef, popupTimeoutRef, tapPreviewActiveRef);
     return;
   }
 
@@ -154,8 +190,13 @@ export function handleMapClick(
   bucketLabelFormatterRef: BucketLabelFormatterRef,
   popupRef: MutableRefObject<MapLibrePopup | null>,
   popupTimeoutRef: MutableRefObject<number | null>,
+  tapPreviewActiveRef: MutableRefObject<boolean>,
   onMapPointClickRef: MutableRefObject<(point: InspectCardState) => void>,
-  event: { point: { x: number; y: number }; lngLat: { lng: number; lat: number } }
+  event: {
+    point: { x: number; y: number };
+    lngLat: { lng: number; lat: number };
+    originalEvent?: Event;
+  }
 ) {
   const feature = map.queryRenderedFeatures([event.point.x, event.point.y], {
     layers: [ISOCHRONE_FILL_LAYER_ID]
@@ -163,7 +204,7 @@ export function handleMapClick(
   const lat = Number(event.lngLat.lat.toFixed(5));
   const lon = Number(event.lngLat.lng.toFixed(5));
   if (!feature) {
-    clearIsochronePopup(popupRef, popupTimeoutRef);
+    clearIsochronePopup(popupRef, popupTimeoutRef, tapPreviewActiveRef);
     onMapPointClickRef.current({
       lat,
       lon,
@@ -175,13 +216,17 @@ export function handleMapClick(
 
   const bucket = featureBucketLabel(feature, bucketLabelFormatterRef);
   if (!bucket) {
-    clearIsochronePopup(popupRef, popupTimeoutRef);
+    clearIsochronePopup(popupRef, popupTimeoutRef, tapPreviewActiveRef);
     return;
   }
 
   if (popupTimeoutRef.current !== null) {
     window.clearTimeout(popupTimeoutRef.current);
+    popupTimeoutRef.current = null;
   }
+
+  const touchInteraction = isTouchInteraction(event.originalEvent);
+  tapPreviewActiveRef.current = touchInteraction;
 
   ensureIsochronePopup(maplibregl, popupRef)
     .setLngLat(popupCoordinates(event.lngLat))
@@ -194,7 +239,8 @@ export function handleMapClick(
     maxS: bucket.maxS
   });
   popupTimeoutRef.current = window.setTimeout(() => {
+    tapPreviewActiveRef.current = false;
     popupRef.current?.remove();
     popupTimeoutRef.current = null;
-  }, 1200);
+  }, touchInteraction ? TOUCH_TAP_PREVIEW_MS : DESKTOP_CLICK_PREVIEW_MS);
 }
