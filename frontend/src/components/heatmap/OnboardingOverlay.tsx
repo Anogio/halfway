@@ -144,7 +144,6 @@ export default function OnboardingOverlay({
             <div className="onboarding-loading-panel">
               <span className="app-loading-spinner" aria-hidden="true" />
               <p className="onboarding-loading-title">{messages.onboarding.loadingTitle}</p>
-              <p className="onboarding-loading-description">{messages.onboarding.loadingDescription}</p>
             </div>
           </div>
         )}

@@ -56,7 +56,6 @@ export type Messages = {
     removeButton: string;
     confirmAndStartMap: string;
     loadingTitle: string;
-    loadingDescription: string;
   };
   inspect: {
     sectionAriaLabel: string;

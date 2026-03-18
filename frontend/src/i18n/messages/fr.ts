@@ -62,8 +62,7 @@ export const frMessages: Messages = {
     removeOriginAriaLabel: (originLabel: string) => `Retirer ${originLabel}`,
     removeButton: "Retirer",
     confirmAndStartMap: "Trouver un point de rencontre",
-    loadingTitle: "Recherche du meilleur point de rencontre...",
-    loadingDescription: "Nous calculons la première carte avant d'ouvrir la carte."
+    loadingTitle: "Recherche du meilleur point de rencontre..."
   },
   inspect: {
     sectionAriaLabel: "Détails du point sur la carte",

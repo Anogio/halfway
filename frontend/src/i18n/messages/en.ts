@@ -62,8 +62,7 @@ export const enMessages: Messages = {
     removeOriginAriaLabel: (originLabel: string) => `Remove ${originLabel}`,
     removeButton: "Remove",
     confirmAndStartMap: "Find a meeting point",
-    loadingTitle: "Finding the best meeting point...",
-    loadingDescription: "We are computing the first heatmap before opening the map."
+    loadingTitle: "Finding the best meeting point..."
   },
   inspect: {
     sectionAriaLabel: "Map point details",
