@@ -1,6 +1,6 @@
 import { type Dispatch, type MutableRefObject, type SetStateAction } from "react";
 
-import { fetchReverseGeocode, type MultiPathItemResponse } from "@/lib/api";
+import { fetchReverseGeocode, type MultiIsochroneResponse, type MultiPathItemResponse } from "@/lib/api";
 import { MAX_ORIGINS, ORIGIN_COLORS } from "@/components/heatmap/constants";
 import type { CursorPosition, InspectCardState, OnboardingOrigin, OriginPoint, ToastState } from "@/components/heatmap/types";
 import { useI18n } from "@/i18n/useI18n";
@@ -21,7 +21,7 @@ type UseOriginActionsArgs = {
   nextOriginIndexRef: MutableRefObject<number>;
   isochroneRequestSeqRef: MutableRefObject<number>;
   clearPathState: () => void;
-  runMultiIsochroneQuery: (originsSnapshot: OriginPoint[]) => Promise<unknown>;
+  runMultiIsochroneQuery: (originsSnapshot: OriginPoint[]) => Promise<MultiIsochroneResponse | null>;
   resetSearch: () => void;
   setSearchOpen: (open: boolean) => void;
   setOrigins: SetState<OriginPoint[]>;

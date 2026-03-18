@@ -14,6 +14,7 @@ type OnboardingOverlayProps = {
   setSearchOpen: (value: boolean) => void;
   searchLoading: boolean;
   searchError: string | null;
+  error: string | null;
   searchResults: GeocodeResult[];
   minChars: number;
   onSelectAddressResult: (result: GeocodeResult) => void;
@@ -22,6 +23,7 @@ type OnboardingOverlayProps = {
   onRemoveOnboardingOrigin: (originId: string) => void;
   onConfirmOnboarding: () => void;
   confirmDisabled: boolean;
+  loading: boolean;
   onClose: () => void;
 };
 
@@ -32,6 +34,7 @@ export default function OnboardingOverlay({
   setSearchOpen,
   searchLoading,
   searchError,
+  error,
   searchResults,
   minChars,
   onSelectAddressResult,
@@ -40,6 +43,7 @@ export default function OnboardingOverlay({
   onRemoveOnboardingOrigin,
   onConfirmOnboarding,
   confirmDisabled,
+  loading,
   onClose
 }: OnboardingOverlayProps) {
   const { messages } = useI18n();
@@ -51,7 +55,7 @@ export default function OnboardingOverlay({
       aria-modal="true"
       aria-label={messages.onboarding.dialogAriaLabel}
     >
-      <div className="onboarding-card">
+      <div className={`onboarding-card${loading ? " is-loading" : ""}`} aria-busy={loading}>
         <div className="onboarding-header">
           <div className="onboarding-brand">
             <Image
@@ -69,6 +73,7 @@ export default function OnboardingOverlay({
             className="onboarding-close"
             onClick={onClose}
             aria-label={messages.onboarding.closeAriaLabel}
+            disabled={loading}
           >
             ×
           </button>
@@ -87,6 +92,7 @@ export default function OnboardingOverlay({
           minChars={minChars}
           onSelectResult={onSelectAddressResult}
           resultsDisabled={onboardingOrigins.length >= maxOrigins}
+          disabled={loading}
         />
 
         <p className="onboarding-origin-count">{messages.onboarding.selectedPoints(onboardingOrigins.length, maxOrigins)}</p>
@@ -106,6 +112,7 @@ export default function OnboardingOverlay({
                     className="onboarding-origin-remove"
                     onClick={() => onRemoveOnboardingOrigin(origin.id)}
                     aria-label={messages.onboarding.removeOriginAriaLabel(displayLabel)}
+                    disabled={loading}
                   >
                     {messages.onboarding.removeButton}
                   </button>
@@ -113,6 +120,12 @@ export default function OnboardingOverlay({
               );
             })}
           </ul>
+        )}
+
+        {error && !loading && (
+          <div className="onboarding-error" role="alert">
+            {error}
+          </div>
         )}
 
         <div className="onboarding-actions">
@@ -125,6 +138,16 @@ export default function OnboardingOverlay({
             {messages.onboarding.confirmAndStartMap}
           </button>
         </div>
+
+        {loading && (
+          <div className="onboarding-loading-veil" role="status" aria-live="polite">
+            <div className="onboarding-loading-panel">
+              <span className="app-loading-spinner" aria-hidden="true" />
+              <p className="onboarding-loading-title">{messages.onboarding.loadingTitle}</p>
+              <p className="onboarding-loading-description">{messages.onboarding.loadingDescription}</p>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

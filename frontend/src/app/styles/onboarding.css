@@ -188,6 +188,7 @@
 }
 
 .onboarding-card {
+  position: relative;
   width: min(760px, calc(100vw - 1.3rem));
   border-radius: 16px;
   border: 1px solid rgba(33, 51, 71, 0.18);
@@ -196,6 +197,19 @@
   padding: 0.9rem;
   max-height: 100%;
   overflow: auto;
+}
+
+.onboarding-card.is-loading > :not(.onboarding-loading-veil) {
+  opacity: 0.42;
+  filter: saturate(0.72);
+}
+
+.onboarding-card.is-loading .onboarding-close,
+.onboarding-card.is-loading .onboarding-origin-remove,
+.onboarding-card.is-loading .onboarding-confirm,
+.onboarding-card.is-loading .map-search-input,
+.onboarding-card.is-loading .map-search-option {
+  cursor: wait;
 }
 
 .onboarding-header {
@@ -322,6 +336,16 @@
   margin-top: 0.66rem;
 }
 
+.onboarding-error {
+  margin-top: 0.7rem;
+  border-radius: 10px;
+  border: 1px solid #e1a7a7;
+  background: rgba(252, 233, 233, 0.93);
+  color: #812020;
+  padding: 0.5rem 0.62rem;
+  font-size: 0.83rem;
+}
+
 .onboarding-confirm {
   border: 0;
   border-radius: 10px;
@@ -338,6 +362,45 @@
 .onboarding-confirm:disabled {
   opacity: 0.52;
   cursor: not-allowed;
+}
+
+.onboarding-loading-veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  background: linear-gradient(180deg, rgba(255, 253, 247, 0.3) 0%, rgba(255, 253, 247, 0.68) 100%);
+}
+
+.onboarding-loading-panel {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  width: min(100%, 340px);
+  padding: 1rem 1.1rem;
+  border-radius: 16px;
+  border: 1px solid rgba(33, 51, 71, 0.14);
+  background: rgba(255, 253, 247, 0.92);
+  box-shadow: 0 12px 28px rgba(25, 36, 50, 0.16);
+  text-align: center;
+}
+
+.onboarding-loading-title,
+.onboarding-loading-description {
+  margin: 0;
+}
+
+.onboarding-loading-title {
+  color: #1e3347;
+  font-size: 0.94rem;
+  font-weight: 800;
+}
+
+.onboarding-loading-description {
+  color: #4c6277;
+  font-size: 0.82rem;
+  line-height: 1.4;
 }
 
 @media (min-width: 901px) {
@@ -467,6 +530,19 @@
     min-height: 48px;
     border-radius: 12px;
     font-size: 0.94rem;
+  }
+
+  .onboarding-loading-panel {
+    width: min(100%, 420px);
+    padding: 1.2rem 1.3rem;
+  }
+
+  .onboarding-loading-title {
+    font-size: 1rem;
+  }
+
+  .onboarding-loading-description {
+    font-size: 0.9rem;
   }
 }
 

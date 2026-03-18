@@ -38,7 +38,8 @@ export const frMessages: Messages = {
     gateOptionsAriaLabel: "Villes disponibles"
   },
   map: {
-    canvasAriaLabel: "Carte de chaleur avec tuiles et superposition"
+    canvasAriaLabel: "Carte de chaleur avec tuiles et superposition",
+    loadingHeatmap: "Mise à jour de la carte de chaleur..."
   },
   search: {
     sectionAriaLabel: "Recherche d'adresse",
@@ -58,7 +59,9 @@ export const frMessages: Messages = {
     noPointSelectedYet: "Aucun point sélectionné pour le moment.",
     removeOriginAriaLabel: (originLabel: string) => `Retirer ${originLabel}`,
     removeButton: "Retirer",
-    confirmAndStartMap: "Confirmer et ouvrir la carte"
+    confirmAndStartMap: "Trouver un point de rencontre",
+    loadingTitle: "Recherche du meilleur point de rencontre...",
+    loadingDescription: "Nous calculons la première carte de chaleur avant d'ouvrir la carte."
   },
   inspect: {
     sectionAriaLabel: "Détails du point sur la carte",

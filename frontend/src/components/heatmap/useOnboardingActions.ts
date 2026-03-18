@@ -1,6 +1,6 @@
 import { type Dispatch, type MutableRefObject, type SetStateAction } from "react";
 
-import type { GeocodeResult } from "@/lib/api";
+import type { GeocodeResult, MultiIsochroneResponse } from "@/lib/api";
 import { MAX_ORIGINS, ORIGIN_COLORS } from "@/components/heatmap/constants";
 import type { CursorPosition, OnboardingOrigin, OriginPoint, ToastState } from "@/components/heatmap/types";
 import { useI18n } from "@/i18n/useI18n";
@@ -15,13 +15,14 @@ type UseOnboardingActionsArgs = {
   nextOriginIndexRef: MutableRefObject<number>;
   nextOnboardingOriginIndexRef: MutableRefObject<number>;
   clearPathState: () => void;
-  runMultiIsochroneQuery: (originsSnapshot: OriginPoint[]) => Promise<unknown>;
+  runMultiIsochroneQuery: (originsSnapshot: OriginPoint[]) => Promise<MultiIsochroneResponse | null>;
   resetSearch: () => void;
   setToast: SetState<ToastState | null>;
   setOrigins: SetState<OriginPoint[]>;
   setInspectCard: SetState<import("@/components/heatmap/types").InspectCardState | null>;
   setOnboardingOpen: SetState<boolean>;
   setOnboardingOrigins: SetState<OnboardingOrigin[]>;
+  setOnboardingSubmitting: SetState<boolean>;
   setInteractionMode: SetState<InteractionMode>;
   setCursorPosition: SetState<CursorPosition | null>;
 };
@@ -46,6 +47,7 @@ export function useOnboardingActions({
   setInspectCard,
   setOnboardingOpen,
   setOnboardingOrigins,
+  setOnboardingSubmitting,
   setInteractionMode,
   setCursorPosition
 }: UseOnboardingActionsArgs): OnboardingActions {
@@ -109,20 +111,28 @@ export function useOnboardingActions({
         color: ORIGIN_COLORS[(idx - 1) % ORIGIN_COLORS.length]
       };
     });
-    nextOriginIndexRef.current = startIndex + onboardingOrigins.length;
 
-    originsRef.current = nextOrigins;
-    setOrigins(nextOrigins);
-    setInspectCard(null);
-    clearPathState();
-
-    setOnboardingOpen(false);
+    setOnboardingSubmitting(true);
     setInteractionMode("inspect");
     setCursorPosition(null);
-    setOnboardingOrigins([]);
-    resetSearch();
+    setInspectCard(null);
 
-    await runMultiIsochroneQuery(nextOrigins);
+    try {
+      const response = await runMultiIsochroneQuery(nextOrigins);
+      if (!response) {
+        return;
+      }
+
+      nextOriginIndexRef.current = startIndex + onboardingOrigins.length;
+      originsRef.current = nextOrigins;
+      setOrigins(nextOrigins);
+      clearPathState();
+      setOnboardingOpen(false);
+      setOnboardingOrigins([]);
+      resetSearch();
+    } finally {
+      setOnboardingSubmitting(false);
+    }
   }
 
   return {

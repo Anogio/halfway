@@ -42,6 +42,7 @@ type HeatmapController = {
   onboardingOpen: boolean;
   citySelectionRequired: boolean;
   onboardingOrigins: OnboardingOrigin[];
+  onboardingSubmitting: boolean;
   cursorPosition: CursorPosition | null;
   addModeActive: boolean;
   addModeBlocked: boolean;
@@ -96,6 +97,7 @@ export function useHeatmapController(): HeatmapController {
 
   const [onboardingOpen, setOnboardingOpen] = useState(true);
   const [onboardingOrigins, setOnboardingOrigins] = useState<OnboardingOrigin[]>([]);
+  const [onboardingSubmitting, setOnboardingSubmitting] = useState(false);
   const [interactionMode, setInteractionMode] = useState<InteractionMode>("inspect");
   const [cursorPosition, setCursorPosition] = useState<CursorPosition | null>(null);
 
@@ -157,6 +159,7 @@ export function useHeatmapController(): HeatmapController {
     setLoading(false);
     setError(null);
     setToast(null);
+    setOnboardingSubmitting(false);
     clearPathState();
     resetSearch();
 
@@ -242,6 +245,7 @@ export function useHeatmapController(): HeatmapController {
     loading,
     metadataLoading,
     pathLoading,
+    onboardingSubmitting,
     originsRef,
     nextOriginIndexRef,
     nextOnboardingOriginIndexRef,
@@ -258,6 +262,7 @@ export function useHeatmapController(): HeatmapController {
     setPathByOriginId,
     setOnboardingOpen,
     setOnboardingOrigins,
+    setOnboardingSubmitting,
     setInteractionMode,
     setCursorPosition
   });
@@ -288,6 +293,7 @@ export function useHeatmapController(): HeatmapController {
     onboardingOpen,
     citySelectionRequired,
     onboardingOrigins,
+    onboardingSubmitting,
     cursorPosition,
     addModeActive,
     addModeBlocked,

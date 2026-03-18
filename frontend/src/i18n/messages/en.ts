@@ -38,7 +38,8 @@ export const enMessages: Messages = {
     gateOptionsAriaLabel: "Available cities"
   },
   map: {
-    canvasAriaLabel: "Heatmap map with tiles and overlay"
+    canvasAriaLabel: "Heatmap map with tiles and overlay",
+    loadingHeatmap: "Updating heatmap..."
   },
   search: {
     sectionAriaLabel: "Address search",
@@ -58,7 +59,9 @@ export const enMessages: Messages = {
     noPointSelectedYet: "No point selected yet.",
     removeOriginAriaLabel: (originLabel: string) => `Remove ${originLabel}`,
     removeButton: "Remove",
-    confirmAndStartMap: "Confirm and start map"
+    confirmAndStartMap: "Find a meeting point",
+    loadingTitle: "Finding the best meeting point...",
+    loadingDescription: "We are computing the first heatmap before opening the map."
   },
   inspect: {
     sectionAriaLabel: "Map point details",

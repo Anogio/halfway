@@ -50,6 +50,7 @@ export default function HeatmapView() {
       searchResults={controller.searchResults}
       mapSearchResultsDisabled={controller.mapSearchResultsDisabled}
       onboardingOrigins={controller.onboardingOrigins}
+      onboardingSubmitting={controller.onboardingSubmitting}
       loading={controller.loading}
       metadataLoading={controller.metadataLoading}
       error={controller.error}

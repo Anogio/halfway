@@ -34,6 +34,7 @@ export type Messages = {
   };
   map: {
     canvasAriaLabel: string;
+    loadingHeatmap: string;
   };
   search: {
     sectionAriaLabel: string;
@@ -54,6 +55,8 @@ export type Messages = {
     removeOriginAriaLabel: (originLabel: string) => string;
     removeButton: string;
     confirmAndStartMap: string;
+    loadingTitle: string;
+    loadingDescription: string;
   };
   inspect: {
     sectionAriaLabel: string;

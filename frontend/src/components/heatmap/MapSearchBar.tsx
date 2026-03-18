@@ -13,6 +13,7 @@ type MapSearchBarProps = {
   minChars: number;
   onSelectResult: (result: GeocodeResult) => void;
   resultsDisabled: boolean;
+  disabled?: boolean;
 };
 
 export default function MapSearchBar({
@@ -26,7 +27,8 @@ export default function MapSearchBar({
   results,
   minChars,
   onSelectResult,
-  resultsDisabled
+  resultsDisabled,
+  disabled = false
 }: MapSearchBarProps) {
   const { messages } = useI18n();
 
@@ -44,6 +46,7 @@ export default function MapSearchBar({
         }}
         aria-label={messages.search.inputAriaLabel}
         autoComplete="off"
+        disabled={disabled}
         data-testid="address-search-input"
       />
       {open && (
@@ -65,7 +68,7 @@ export default function MapSearchBar({
                   aria-selected="false"
                   onMouseDown={(event) => event.preventDefault()}
                   onClick={() => onSelectResult(result)}
-                  disabled={resultsDisabled}
+                  disabled={resultsDisabled || disabled}
                 >
                   <span className="map-search-option-label">{result.label}</span>
                 </button>

@@ -1,6 +1,6 @@
 import { type Dispatch, type MutableRefObject, type SetStateAction } from "react";
 
-import type { GeocodeResult, MultiPathItemResponse } from "@/lib/api";
+import type { GeocodeResult, MultiIsochroneResponse, MultiPathItemResponse } from "@/lib/api";
 import type { CursorPosition, InspectCardState, OnboardingOrigin, OriginPoint, ToastState } from "@/components/heatmap/types";
 import { useOnboardingActions } from "@/components/heatmap/useOnboardingActions";
 import { useOriginActions } from "@/components/heatmap/useOriginActions";
@@ -18,12 +18,13 @@ type UseHeatmapActionsArgs = {
   loading: boolean;
   metadataLoading: boolean;
   pathLoading: boolean;
+  onboardingSubmitting: boolean;
   originsRef: MutableRefObject<OriginPoint[]>;
   nextOriginIndexRef: MutableRefObject<number>;
   nextOnboardingOriginIndexRef: MutableRefObject<number>;
   isochroneRequestSeqRef: MutableRefObject<number>;
   clearPathState: () => void;
-  runMultiIsochroneQuery: (originsSnapshot: OriginPoint[]) => Promise<unknown>;
+  runMultiIsochroneQuery: (originsSnapshot: OriginPoint[]) => Promise<MultiIsochroneResponse | null>;
   resetSearch: () => void;
   setSearchOpen: (open: boolean) => void;
   setOrigins: SetState<OriginPoint[]>;
@@ -34,6 +35,7 @@ type UseHeatmapActionsArgs = {
   setPathByOriginId: SetState<Record<string, MultiPathItemResponse | null>>;
   setOnboardingOpen: SetState<boolean>;
   setOnboardingOrigins: SetState<OnboardingOrigin[]>;
+  setOnboardingSubmitting: SetState<boolean>;
   setInteractionMode: SetState<InteractionMode>;
   setCursorPosition: SetState<CursorPosition | null>;
 };

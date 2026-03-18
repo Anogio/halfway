@@ -29,6 +29,7 @@ type HeatmapViewFrameProps = {
   searchResults: GeocodeResult[];
   mapSearchResultsDisabled: boolean;
   onboardingOrigins: OnboardingOrigin[];
+  onboardingSubmitting: boolean;
   loading: boolean;
   metadataLoading: boolean;
   error: string | null;
@@ -69,6 +70,7 @@ export default function HeatmapViewFrame({
   searchResults,
   mapSearchResultsDisabled,
   onboardingOrigins,
+  onboardingSubmitting,
   loading,
   metadataLoading,
   error,
@@ -125,6 +127,7 @@ export default function HeatmapViewFrame({
           setSearchOpen={setSearchOpen}
           searchLoading={searchLoading}
           searchError={searchError}
+          error={error}
           searchResults={searchResults}
           minChars={SEARCH_MIN_CHARS}
           onSelectAddressResult={(result) => void onSelectAddressResult(result)}
@@ -132,7 +135,8 @@ export default function HeatmapViewFrame({
           maxOrigins={MAX_ORIGINS}
           onRemoveOnboardingOrigin={onRemoveOnboardingOrigin}
           onConfirmOnboarding={() => void onConfirmOnboarding()}
-          confirmDisabled={onboardingOrigins.length === 0 || loading || metadataLoading}
+          confirmDisabled={onboardingOrigins.length === 0 || onboardingSubmitting || loading || metadataLoading}
+          loading={onboardingSubmitting}
           onClose={onCloseOnboarding}
         />
       ) : (
@@ -167,6 +171,15 @@ export default function HeatmapViewFrame({
             >
               {messages.inspect.clearSelection}
             </button>
+          </div>
+        </div>
+      )}
+
+      {loading && !onboardingOpen && !citySelectionRequired && (
+        <div className="map-loading-indicator" role="status" aria-live="polite">
+          <div className="map-loading-indicator-chip">
+            <span className="app-loading-spinner" aria-hidden="true" />
+            <span>{messages.map.loadingHeatmap}</span>
           </div>
         </div>
       )}
