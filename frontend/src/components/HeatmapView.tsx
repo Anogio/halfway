@@ -10,7 +10,7 @@ import { useViewportHeightCssVar } from "@/components/heatmap/useViewportHeightC
 import { useI18n } from "@/i18n/useI18n";
 
 export default function HeatmapView() {
-  const { messages } = useI18n();
+  const { locale, messages } = useI18n();
   const controller = useHeatmapController();
   useViewportHeightCssVar();
 
@@ -20,6 +20,7 @@ export default function HeatmapView() {
   );
 
   const { mapRef } = useMapLibreMap({
+    locale,
     defaultView: controller.defaultView,
     maxBoundsBbox: controller.mapBbox,
     scalarGrid: controller.data?.scalar_grid,

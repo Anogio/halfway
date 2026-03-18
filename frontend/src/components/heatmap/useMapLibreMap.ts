@@ -4,6 +4,7 @@ import type { Map as MapLibreMap, Marker as MapLibreMarker, Popup as MapLibrePop
 import type { IsochroneScalarGrid, MultiPathItemResponse } from "@/lib/api";
 import type { InspectCardState, OriginPoint } from "@/components/heatmap/types";
 import type { TransitMapDebugHandle } from "@/components/heatmap/mapDebug";
+import type { Locale } from "@/i18n/types";
 import { buildOriginSourceData, buildPathSourceData } from "@/components/heatmap/maplibreData";
 import { createMapLibreDebugHandle, setBoundsAndView } from "@/components/heatmap/maplibreDebug";
 import {
@@ -14,7 +15,7 @@ import {
 } from "@/components/heatmap/maplibreInteractions";
 import { ORIGIN_SOURCE_ID, PATH_SOURCE_ID } from "@/components/heatmap/maplibreIds";
 import {
-  createRasterStyle,
+  createBaseMapStyle,
   ensureOverlaySourcesAndLayers,
   updateIsochroneRasterSource,
   updateGeoJsonSource
@@ -22,6 +23,7 @@ import {
 import { buildScalarRasterOverlay } from "@/components/heatmap/scalarGrid";
 
 type UseMapLibreMapArgs = {
+  locale: Locale;
   defaultView: [number, number, number] | null;
   maxBoundsBbox: [number, number, number, number] | null;
   scalarGrid: IsochroneScalarGrid | null | undefined;
@@ -40,6 +42,7 @@ declare global {
 }
 
 export function useMapLibreMap({
+  locale,
   defaultView,
   maxBoundsBbox,
   scalarGrid,
@@ -133,7 +136,7 @@ export function useMapLibreMap({
 
       const map = new maplibregl.Map({
         container: mapRef.current,
-        style: createRasterStyle(),
+        style: createBaseMapStyle(locale),
         center: [defaultViewTuple[1], defaultViewTuple[0]],
         zoom: defaultViewTuple[2]
       });
@@ -231,7 +234,7 @@ export function useMapLibreMap({
         window.__transitMap = undefined;
       }
     };
-  }, [defaultLat, defaultLon, defaultZoom, bboxMinLon, bboxMinLat, bboxMaxLon, bboxMaxLat]);
+  }, [locale, defaultLat, defaultLon, defaultZoom, bboxMinLon, bboxMinLat, bboxMaxLon, bboxMaxLat]);
 
   useEffect(() => {
     const map = mapInstanceRef.current;
