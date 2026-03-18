@@ -91,12 +91,12 @@ def _with_grenoble_city(data: dict[str, object]) -> dict[str, object]:
         "paths": {"gtfs_input": "backend/offline/data/gtfs/grenoble"},
         "scope": {
             "use_bbox": True,
-            "bbox": [5.5900, 44.9700, 5.8900, 45.2950],
+            "bbox": [5.5000, 44.9700, 6.0000, 45.2950],
             "default_view": [45.1885, 5.7245, 11],
         },
         "geocoding": {
             "country_codes": "fr",
-            "viewbox": "5.5900,44.9700,5.8900,45.2950",
+            "viewbox": "5.5000,44.9700,6.0000,45.2950",
             "bounded": True,
         },
         "validation": {
