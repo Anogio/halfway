@@ -1,6 +1,7 @@
 #!/bin/zsh
 
 set -euo pipefail
+unsetopt BG_NICE 2>/dev/null || true
 
 ROOT_DIR="$(cd "$(dirname "$0")/../.." && pwd)"
 BACKEND_DIR="$ROOT_DIR/backend"
@@ -27,6 +28,17 @@ cleanup() {
   fi
 }
 
+ensure_port_free() {
+  local host="$1"
+  local port="$2"
+  local label="$3"
+
+  if lsof -nP -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | grep -F "${host}:${port}" >/dev/null; then
+    echo "${label} port ${host}:${port} is already in use. Stop the competing process or override the port with E2E_${label}_PORT." >&2
+    return 1
+  fi
+}
+
 wait_for_url() {
   local url="$1"
   local label="$2"
@@ -47,8 +59,13 @@ wait_for_url() {
 
 trap cleanup EXIT INT TERM
 
+ensure_port_free "$BACKEND_HOST" "$BACKEND_PORT" "BACKEND"
+ensure_port_free "$FRONTEND_HOST" "$FRONTEND_PORT" "FRONTEND"
+
 cd "$BACKEND_DIR"
 CORS_ALLOW_ORIGIN_REGEX="^http://${FRONTEND_HOST//./\\.}:${FRONTEND_PORT}$" \
+  HOST="$BACKEND_HOST" \
+  PORT="$BACKEND_PORT" \
   PYTHONPATH=src:shared/src \
   UV_CACHE_DIR=.uv-cache \
   uv run python -m transit_backend.api.server \
