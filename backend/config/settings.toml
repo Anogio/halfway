@@ -163,6 +163,82 @@ to_lon = -0.1419
 expected_min_s = 1500
 expected_max_s = 3900
 
+[cities.grenoble]
+label = "Grenoble"
+artifact_version = "v2"
+
+[cities.grenoble.paths]
+gtfs_input = "offline/data/gtfs/grenoble"
+
+[cities.grenoble.scope]
+use_bbox = true
+bbox = [5.6400, 45.1050, 5.8100, 45.2450] # min_lon, min_lat, max_lon, max_lat
+default_view = [45.1885, 5.7245, 11]
+
+[cities.grenoble.geocoding]
+country_codes = "fr"
+viewbox = "5.6400,45.1050,5.8100,45.2450"
+bounded = true
+
+[cities.grenoble.validation]
+mape_threshold = 0.25
+range_tolerance_ratio = 0.30
+performance_p95_ms_threshold = 1500
+
+[[cities.grenoble.validation.od_pairs]]
+name = "Grenoble Gares to Grand'place"
+from_lat = 45.1918
+from_lon = 5.7145
+to_lat = 45.1739
+to_lon = 5.7333
+expected_min_s = 600
+expected_max_s = 1800
+
+[[cities.grenoble.validation.od_pairs]]
+name = "Fontaine La Poya to Gières Gare - Université"
+from_lat = 45.1910
+from_lon = 5.6816
+to_lat = 45.1838
+to_lon = 5.7903
+expected_min_s = 1200
+expected_max_s = 3000
+
+[[cities.grenoble.validation.od_pairs]]
+name = "Saint-Égrève Gare to Grenoble Victor Hugo"
+from_lat = 45.2326
+from_lon = 5.6826
+to_lat = 45.1881
+to_lon = 5.7244
+expected_min_s = 900
+expected_max_s = 2400
+
+[[cities.grenoble.validation.od_pairs]]
+name = "Claix Pont Rouge to Meylan Lycee du Gresivaudan"
+from_lat = 45.1209
+from_lon = 5.6914
+to_lat = 45.2108
+to_lon = 5.7835
+expected_min_s = 1500
+expected_max_s = 3600
+
+[[cities.grenoble.validation.od_pairs]]
+name = "Seyssins Le Prisme to Universite - Condillac"
+from_lat = 45.1601
+from_lon = 5.6896
+to_lat = 45.1914
+to_lon = 5.7687
+expected_min_s = 1200
+expected_max_s = 3000
+
+[[cities.grenoble.validation.od_pairs]]
+name = "Echirolles Centre du Graphisme to Montbonnot Pre de l'Eau"
+from_lat = 45.1454
+from_lon = 5.7219
+to_lat = 45.2191
+to_lon = 5.8092
+expected_min_s = 1500
+expected_max_s = 3600
+
 [cities.madrid]
 label = "Madrid"
 artifact_version = "v2"

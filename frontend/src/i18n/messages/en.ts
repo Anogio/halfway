@@ -21,6 +21,8 @@ export const enMessages: Messages = {
       switch (cityId) {
         case "london_uk":
           return "London";
+        case "grenoble_fr":
+          return "Grenoble";
         case "madrid_es":
           return "Madrid";
         case "paris_fr":

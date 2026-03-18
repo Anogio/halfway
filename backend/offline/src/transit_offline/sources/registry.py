@@ -2,12 +2,14 @@ from __future__ import annotations
 
 from transit_offline.sources.base import SourceAdapter
 from transit_offline.sources.direct_gtfs import DirectGtfsSourceAdapter
+from transit_offline.sources.grenoble.adapter import GrenobleSourceAdapter
 from transit_offline.sources.london.adapter import LondonSourceAdapter
 from transit_offline.sources.madrid.adapter import MadridSourceAdapter
 
 
 def get_source_adapter(city_id: str) -> SourceAdapter:
     adapters: dict[str, SourceAdapter] = {
+        "grenoble": GrenobleSourceAdapter(),
         "london": LondonSourceAdapter(),
         "madrid": MadridSourceAdapter(),
         "paris": DirectGtfsSourceAdapter(),

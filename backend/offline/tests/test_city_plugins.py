@@ -13,6 +13,49 @@ from helpers import make_settings_data, write_csv
 
 
 class CityPluginsTest(unittest.TestCase):
+    def test_grenoble_plugin_excludes_night_and_replacement_bus_routes_during_ingest(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            gtfs = root / "gtfs"
+            write_csv(
+                gtfs / "routes.txt",
+                ["route_id", "agency_id", "route_short_name", "route_long_name", "route_type"],
+                [
+                    ["DAY", "A1", "C1", "C1", "3"],
+                    ["NIGHT", "A1", "N62", "N62", "3"],
+                    ["REPLACE", "A1", "NAVA", "NAVA", "3"],
+                    ["TRAM", "A1", "A", "A", "0"],
+                ],
+            )
+
+            plugin = get_city_plugin("grenoble")
+            routes, route_to_type, _ = load_routes(gtfs, {"0", "3"}, plugin=plugin)
+
+            self.assertEqual(routes, {"DAY", "TRAM"})
+            self.assertEqual(route_to_type, {"DAY": "3", "TRAM": "0"})
+
+    def test_grenoble_route_label_formatting_is_city_plugin_owned(self) -> None:
+        plugin = get_city_plugin("grenoble")
+
+        self.assertEqual(
+            plugin.format_route_label(
+                route_id="route-a",
+                short_name="A",
+                long_name="Fontaine La Poya / Le Pont-de-Claix L'Etoile",
+                route_type="0",
+            ),
+            "Tram A",
+        )
+        self.assertEqual(
+            plugin.format_route_label(
+                route_id="route-c1",
+                short_name="C1",
+                long_name="Grenoble / Montbonnot-Saint-Martin",
+                route_type="3",
+            ),
+            "C1 bus",
+        )
+
     def test_london_route_label_formatting_is_city_plugin_owned(self) -> None:
         plugin = get_city_plugin("london")
 

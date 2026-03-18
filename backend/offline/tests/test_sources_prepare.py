@@ -84,6 +84,41 @@ def _with_madrid_city(data: dict[str, object]) -> dict[str, object]:
     return data
 
 
+def _with_grenoble_city(data: dict[str, object]) -> dict[str, object]:
+    data["cities"]["grenoble"] = {
+        "label": "Grenoble",
+        "artifact_version": "v2",
+        "paths": {"gtfs_input": "backend/offline/data/gtfs/grenoble"},
+        "scope": {
+            "use_bbox": True,
+            "bbox": [5.6400, 45.1050, 5.8100, 45.2450],
+            "default_view": [45.1885, 5.7245, 11],
+        },
+        "geocoding": {
+            "country_codes": "fr",
+            "viewbox": "5.6400,45.1050,5.8100,45.2450",
+            "bounded": True,
+        },
+        "validation": {
+            "mape_threshold": 0.25,
+            "range_tolerance_ratio": 0.30,
+            "performance_p95_ms_threshold": 1500,
+            "od_pairs": [
+                {
+                    "name": "A-B",
+                    "from_lat": 45.19,
+                    "from_lon": 5.72,
+                    "to_lat": 45.18,
+                    "to_lon": 5.74,
+                    "expected_min_s": 600,
+                    "expected_max_s": 1800,
+                }
+            ],
+        },
+    }
+    return data
+
+
 def _csv_text(header: list[str], rows: list[list[str]]) -> str:
     buffer = io.StringIO()
     writer = csv.writer(buffer)
@@ -161,6 +196,97 @@ def _make_minimal_madrid_zip(path: Path, *, agency_id: str, route_id: str, route
 
 
 class PrepareDataPipelineTest(unittest.TestCase):
+    def test_prepare_data_grenoble_generates_empty_pathways_when_feed_omits_it(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            gtfs = root / "gtfs" / "grenoble"
+            gtfs.mkdir(parents=True)
+            _make_minimal_madrid_zip(
+                root / "grenoble.zip",
+                agency_id="sem",
+                route_id="TRAM_A",
+                route_short_name="A",
+                route_type="0",
+            )
+            with zipfile.ZipFile(root / "grenoble.zip") as zf:
+                for name in zf.namelist():
+                    if name == "feed_info.txt":
+                        continue
+                    if name == "transfers.txt":
+                        continue
+                    target = gtfs / name
+                    target.write_bytes(zf.read(name))
+            (gtfs / "feed_info.txt").write_text(
+                "\n".join(
+                    [
+                        "feed_publisher_name,feed_publisher_url,feed_lang,feed_id",
+                        "Mobilites M,https://www.mobilites-m.fr/,fr,SEM",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            data = make_settings_data(artifact_version="v1")
+            _with_grenoble_city(data)
+            settings = parse_settings(data)
+            cfg = AppConfig(
+                settings=settings,
+                city_id="grenoble",
+                city=settings.cities["grenoble"],
+                data=data,
+                paths=AppPaths(
+                    repo_root=root,
+                    city_id="grenoble",
+                    gtfs_input=gtfs,
+                    offline_raw_root=root / "raw",
+                    offline_interim_root=root / "interim",
+                    offline_artifacts_root=root / "artifacts",
+                    offline_raw_dir=root / "raw" / "grenoble",
+                    offline_interim_dir=root / "interim" / "grenoble",
+                    offline_artifacts_dir=root / "artifacts" / "grenoble",
+                ),
+            )
+
+            report = run_prepare_data(config=cfg)
+
+            self.assertEqual(report["adapter"], "grenoble_gtfs")
+            self.assertEqual(report["status"], "ready_for_ingest")
+            self.assertTrue((gtfs / "pathways.txt").exists())
+            self.assertTrue((gtfs / "transfers.txt").exists())
+
+    def test_prepare_data_grenoble_blocks_when_core_gtfs_files_are_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            gtfs = root / "gtfs" / "grenoble"
+            gtfs.mkdir(parents=True)
+            data = make_settings_data(artifact_version="v1")
+            _with_grenoble_city(data)
+            settings = parse_settings(data)
+            cfg = AppConfig(
+                settings=settings,
+                city_id="grenoble",
+                city=settings.cities["grenoble"],
+                data=data,
+                paths=AppPaths(
+                    repo_root=root,
+                    city_id="grenoble",
+                    gtfs_input=gtfs,
+                    offline_raw_root=root / "raw",
+                    offline_interim_root=root / "interim",
+                    offline_artifacts_root=root / "artifacts",
+                    offline_raw_dir=root / "raw" / "grenoble",
+                    offline_interim_dir=root / "interim" / "grenoble",
+                    offline_artifacts_dir=root / "artifacts" / "grenoble",
+                ),
+            )
+
+            report = run_prepare_data(config=cfg)
+
+            self.assertEqual(report["status"], "missing_gtfs_files")
+            self.assertFalse(report["ready_for_ingest"])
+            self.assertIn("agency.txt", report["missing_required_files"])
+
     def test_prepare_data_uses_registered_direct_gtfs_adapter_for_paris(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from transit_offline.cities.base import CityPlugin
+from transit_offline.cities.grenoble.plugin import GrenobleCityPlugin
 from transit_offline.cities.london.plugin import LondonCityPlugin
 from transit_offline.cities.madrid.plugin import MadridCityPlugin
 from transit_offline.cities.paris.plugin import ParisCityPlugin
 
 _CITY_PLUGINS: dict[str, CityPlugin] = {
+    "grenoble": GrenobleCityPlugin(),
     "london": LondonCityPlugin(),
     "madrid": MadridCityPlugin(),
     "paris": ParisCityPlugin(),

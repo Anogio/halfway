@@ -1,0 +1,90 @@
+{
+  "city": "grenoble",
+  "failures": [],
+  "metrics": {
+    "avg_out_degree": 6.643344709897611,
+    "grid_in_scope_cells": 2614,
+    "grid_linked_cells": 3402,
+    "grid_reachability_ratio_from_city_center": 0.9158377964804897,
+    "mape": 0.0,
+    "mape_threshold": 0.25,
+    "performance_max_ms": 5.763041990576312,
+    "performance_p50_ms": 4.942833009408787,
+    "performance_p95_ms": 5.763041990576312,
+    "performance_p95_threshold_ms": 1500.0,
+    "performance_samples_ms": [
+      4.324665991589427,
+      4.6424579923041165,
+      4.722750003566034,
+      4.942833009408787,
+      5.388500008848496,
+      5.763041990576312
+    ],
+    "range_tolerance_ratio": 0.3
+  },
+  "od_results": [
+    {
+      "expected_max_s": 1800,
+      "expected_min_s": 600,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Grenoble Gares to Grand'place",
+      "predicted_s": 1174,
+      "tolerance_max_s": 2160,
+      "tolerance_min_s": 240
+    },
+    {
+      "expected_max_s": 3000,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Fontaine La Poya to Gi\u00e8res Gare - Universit\u00e9",
+      "predicted_s": 2809,
+      "tolerance_max_s": 3540,
+      "tolerance_min_s": 660
+    },
+    {
+      "expected_max_s": 2400,
+      "expected_min_s": 900,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Saint-\u00c9gr\u00e8ve Gare to Grenoble Victor Hugo",
+      "predicted_s": 1601,
+      "tolerance_max_s": 2850,
+      "tolerance_min_s": 450
+    },
+    {
+      "expected_max_s": 3600,
+      "expected_min_s": 1500,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Claix Pont Rouge to Meylan Lycee du Gresivaudan",
+      "predicted_s": 3475,
+      "tolerance_max_s": 4230,
+      "tolerance_min_s": 870
+    },
+    {
+      "expected_max_s": 3000,
+      "expected_min_s": 1200,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Seyssins Le Prisme to Universite - Condillac",
+      "predicted_s": 2482,
+      "tolerance_max_s": 3540,
+      "tolerance_min_s": 660
+    },
+    {
+      "expected_max_s": 3600,
+      "expected_min_s": 1500,
+      "in_expected_range": true,
+      "mape": 0.0,
+      "name": "Echirolles Centre du Graphisme to Montbonnot Pre de l'Eau",
+      "predicted_s": 3044,
+      "tolerance_max_s": 4230,
+      "tolerance_min_s": 870
+    }
+  ],
+  "ok": true,
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

@@ -1,0 +1,44 @@
+{
+  "artifacts": [
+    {
+      "name": "graph_v2_weekday.json",
+      "sha256": "6ae87d163a8230d5d57ac6bb74e8c42ecbe1dc0ab3e56ffdd3c6e006ba5e7136",
+      "size_bytes": 331777
+    },
+    {
+      "name": "nodes_v2.csv",
+      "sha256": "ed470092a4f06487ee130f0fb2a1eeb37d47e321f893506967b369bffa129745",
+      "size_bytes": 373153
+    },
+    {
+      "name": "grid_cells_v2.csv",
+      "sha256": "b39bd49708c08981d9e0ceebbeeef801b7cae1d5c1c541535ca88defbbe6cf74",
+      "size_bytes": 97584
+    },
+    {
+      "name": "grid_links_v2.csv",
+      "sha256": "747a87b3d6727b3d3ba422266eaa40de4c5792fb4cdd7b311809ab35ea980470",
+      "size_bytes": 645441
+    },
+    {
+      "name": "validation_v2.json",
+      "sha256": "eb92e337ed43fd6bdfc8f01d4ca9a562601f9739ba8c9d8326f0d535c9657fbc",
+      "size_bytes": 2432
+    }
+  ],
+  "build_timestamp_utc": "2026-03-18T09:20:09.234863+00:00",
+  "city": "grenoble",
+  "config_hash": "e04c39763dd925911814500a6157c96dbe8e01fded7877be64b0b1ab716eba54",
+  "counts": {
+    "edges": 11679,
+    "nodes": 4055
+  },
+  "feed_info": {
+    "feed_id": "SEM",
+    "feed_lang": "FR",
+    "feed_publisher_name": "Mobilit\u00e9s M - M\u00e9tropole Grenobloise",
+    "feed_publisher_url": "https://www.mobilites-m.fr/"
+  },
+  "profile": "weekday_non_holiday",
+  "version": "v2"
+}

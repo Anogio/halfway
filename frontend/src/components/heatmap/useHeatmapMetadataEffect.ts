@@ -6,7 +6,7 @@ import { useI18n } from "@/i18n/useI18n";
 
 type SetState<T> = Dispatch<SetStateAction<T>>;
 
-const PREFERRED_CITY_ORDER = ["paris_fr", "london_uk", "madrid_es"] as const;
+const PREFERRED_CITY_ORDER = ["paris_fr", "grenoble_fr", "london_uk", "madrid_es"] as const;
 
 function toNumberTuple3(value: readonly unknown[], field: string): [number, number, number] {
   if (value.length !== 3) {

@@ -1,0 +1,25 @@
+{
+  "alight_edges": 2297,
+  "boarding_edges": 2297,
+  "city": "grenoble",
+  "edge_kind_counts": {
+    "alight": 2297,
+    "boarding": 2297,
+    "ride": 2170,
+    "transfer_fallback": 1854,
+    "transfer_gtfs": 3061,
+    "transfer_pathway": 0
+  },
+  "graph_edges": 11679,
+  "nodes": 4055,
+  "onboard_nodes": 2297,
+  "physical_nodes": 1758,
+  "ride_edges_raw": 2170,
+  "version": "v2",
+  "wait_stats": {
+    "max_wait_s": 600,
+    "mean_wait_s": 391.9306930693069,
+    "min_wait_s": 30,
+    "routes_with_wait": 101
+  }
+}
