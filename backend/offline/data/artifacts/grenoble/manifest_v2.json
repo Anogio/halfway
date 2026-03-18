@@ -12,23 +12,23 @@
     },
     {
       "name": "grid_cells_v2.csv",
-      "sha256": "b39bd49708c08981d9e0ceebbeeef801b7cae1d5c1c541535ca88defbbe6cf74",
-      "size_bytes": 97584
+      "sha256": "c5fbad42cd40da0fee46d14063d35763e0d5a8110706a987521dfbf1e2b66a00",
+      "size_bytes": 402176
     },
     {
       "name": "grid_links_v2.csv",
-      "sha256": "747a87b3d6727b3d3ba422266eaa40de4c5792fb4cdd7b311809ab35ea980470",
-      "size_bytes": 645441
+      "sha256": "714798c81aecf1911d9fd772d9008dc56e2076bfa0e99cf7625c86355daba4d8",
+      "size_bytes": 1750295
     },
     {
       "name": "validation_v2.json",
-      "sha256": "eb92e337ed43fd6bdfc8f01d4ca9a562601f9739ba8c9d8326f0d535c9657fbc",
+      "sha256": "f40a894befdbf2e4cd0a9a04795291b4f1bc8a85471567314d9f80639a958dc4",
       "size_bytes": 2432
     }
   ],
-  "build_timestamp_utc": "2026-03-18T09:20:09.234863+00:00",
+  "build_timestamp_utc": "2026-03-18T09:36:13.776552+00:00",
   "city": "grenoble",
-  "config_hash": "e04c39763dd925911814500a6157c96dbe8e01fded7877be64b0b1ab716eba54",
+  "config_hash": "dce11ab3dd4685f1d483ff6e576cdcceeab740f5414c452563969e161d432634",
   "counts": {
     "edges": 11679,
     "nodes": 4055

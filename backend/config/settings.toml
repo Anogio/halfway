@@ -172,12 +172,12 @@ gtfs_input = "offline/data/gtfs/grenoble"
 
 [cities.grenoble.scope]
 use_bbox = true
-bbox = [5.6400, 45.1050, 5.8100, 45.2450] # min_lon, min_lat, max_lon, max_lat
+bbox = [5.5900, 44.9700, 5.8900, 45.2950] # min_lon, min_lat, max_lon, max_lat
 default_view = [45.1885, 5.7245, 11]
 
 [cities.grenoble.geocoding]
 country_codes = "fr"
-viewbox = "5.6400,45.1050,5.8100,45.2450"
+viewbox = "5.5900,44.9700,5.8900,45.2950"
 bounded = true
 
 [cities.grenoble.validation]
