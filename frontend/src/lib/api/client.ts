@@ -63,7 +63,11 @@ export async function fetchMultiIsochrones(
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ city: cityId, origins, debug: options.debug ?? ROUTING_DEBUG_STATS })
+      body: JSON.stringify({
+        city: cityId,
+        origins,
+        debug: options.debug ?? ROUTING_DEBUG_STATS
+      })
     },
     "Multi-isochrone request"
   );

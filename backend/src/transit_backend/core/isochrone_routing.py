@@ -3,7 +3,7 @@ from __future__ import annotations
 from transit_backend.core.artifacts import RuntimeData
 from transit_backend.core.cells import cells_from_cell_times, total_in_scope_cells_for_walk_limit
 from transit_backend.core.heatmap import compute_origin_cell_times
-from transit_backend.core.isochrones import GridTopology, build_isochrone_feature_collection
+from transit_backend.core.isochrones import GridTopology, build_isochrone_scalar_grid
 from transit_backend.core.spatial import SpatialIndex
 
 
@@ -19,7 +19,6 @@ def compute_isochrones(
     walk_speed_mps: float,
     compute_max_time_s: int,
     render_max_time_s: int,
-    bucket_size_s: int,
     include_stats: bool = True,
 ) -> dict[str, object]:
     origin_grid = compute_origin_cell_times(
@@ -36,16 +35,14 @@ def compute_isochrones(
     cells = cells_from_cell_times(runtime, origin_grid["cell_times"])
     render_cells = [cell for cell in cells if int(cell["time_s"]) <= render_max_time_s]
 
-    feature_collection = build_isochrone_feature_collection(
-        render_cells,
-        topology=topology,
-        bucket_size_s=bucket_size_s,
-        max_time_s=render_max_time_s,
-    )
     response = {
         "origin": {"lat": origin_lat, "lon": origin_lon},
         "profile": runtime.profile,
-        "feature_collection": feature_collection,
+        "scalar_grid": build_isochrone_scalar_grid(
+            cells=render_cells,
+            topology=topology,
+            max_time_s=render_max_time_s,
+        ),
     }
     if include_stats:
         total_scoped_cells = total_in_scope_cells_for_walk_limit(
@@ -60,8 +57,6 @@ def compute_isochrones(
             "total_linked_cells": total_scoped_cells,
             "compute_max_time_s": int(compute_max_time_s),
             "render_max_time_s": int(render_max_time_s),
-            "bucket_size_s": bucket_size_s,
-            "bucket_count": len(feature_collection["features"]),
         }
     return response
 
@@ -76,7 +71,6 @@ def compute_multi_isochrones(
     max_seed_nodes: int,
     walk_speed_mps: float,
     max_time_s: int,
-    bucket_size_s: int,
     cached_origin_cells: dict[str, dict[int, int]] | None = None,
     cached_seed_counts: dict[str, int] | None = None,
     include_stats: bool = True,
@@ -129,19 +123,17 @@ def compute_multi_isochrones(
 
     cells = cells_from_cell_times(runtime, merged)
     render_cells = [cell for cell in cells if int(cell["time_s"]) <= max_time_s]
-    feature_collection = build_isochrone_feature_collection(
-        render_cells,
-        topology=topology,
-        bucket_size_s=bucket_size_s,
-        max_time_s=max_time_s,
-    )
     response = {
         "origins": [
             {"id": str(origin["id"]), "lat": float(origin["lat"]), "lon": float(origin["lon"])}
             for origin in origins
         ],
         "profile": runtime.profile,
-        "feature_collection": feature_collection,
+        "scalar_grid": build_isochrone_scalar_grid(
+            cells=render_cells,
+            topology=topology,
+            max_time_s=max_time_s,
+        ),
     }
     if include_stats:
         total_scoped_cells = total_in_scope_cells_for_walk_limit(
@@ -158,7 +150,5 @@ def compute_multi_isochrones(
             "total_linked_cells": total_scoped_cells,
             "compute_max_time_s": int(max_time_s),
             "render_max_time_s": int(max_time_s),
-            "bucket_size_s": bucket_size_s,
-            "bucket_count": len(feature_collection["features"]),
         }
     return response

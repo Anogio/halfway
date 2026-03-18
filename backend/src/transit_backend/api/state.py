@@ -311,7 +311,6 @@ def build_app_state(
     first_mile_fallback_k = settings.search.first_mile_fallback_k
     max_seed_nodes = settings.runtime.max_seed_nodes
     walk_speed_mps = settings.weights.walk_speed_mps
-    isochrone_bucket_size_s = settings.runtime.isochrone_bucket_size_s
 
     loader = runtime_loader or _build_runtime_loader(config, radius_m=first_mile_radius)
     return {
@@ -322,7 +321,6 @@ def build_app_state(
             "max_time_s": SERVER_TIME_CAP_S,
             "max_seed_nodes": max_seed_nodes,
             "walk_speed_mps": walk_speed_mps,
-            "isochrone_bucket_size_s": isochrone_bucket_size_s,
             "isochrone_render_max_time_s": SERVER_TIME_CAP_S,
         },
         "city_runtime_manager": CityRuntimeManager(

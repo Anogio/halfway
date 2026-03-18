@@ -1,4 +1,3 @@
-import type { Feature, GeoJsonProperties, MultiPolygon } from "geojson";
 import type {
   LngLatLike,
   Map as MapLibreMap,
@@ -7,13 +6,12 @@ import type {
 } from "maplibre-gl";
 import type { MutableRefObject } from "react";
 
-import { bucketLabel } from "@/lib/heatmapPresentation.mjs";
-import { ISOCHRONE_FILL_LAYER_ID } from "@/components/heatmap/maplibreIds";
+import type { IsochroneScalarGrid } from "@/lib/api";
+import { sampleScalarGridAtLngLat } from "@/components/heatmap/scalarGrid";
 import type { InspectCardState } from "@/components/heatmap/types";
 
-export type BucketLabelFormatterRef = MutableRefObject<
-  (minMinutes: number, maxMinutes: number) => string
->;
+export type TimeLabelFormatterRef = MutableRefObject<(seconds: number) => string>;
+export type ScalarGridRef = MutableRefObject<IsochroneScalarGrid | null | undefined>;
 
 const DESKTOP_CLICK_PREVIEW_MS = 1200;
 const TOUCH_TAP_PREVIEW_MS = 3000;
@@ -41,20 +39,19 @@ function isTouchInteraction(originalEvent?: Event): boolean {
   return sourceCapabilities?.firesTouchEvents === true;
 }
 
-function featureBucketLabel(
-  feature: Feature<MultiPolygon, GeoJsonProperties> | undefined,
-  bucketLabelFormatterRef: BucketLabelFormatterRef
+function scalarGridLabel(
+  scalarGridRef: ScalarGridRef,
+  lngLat: { lng: number; lat: number },
+  timeLabelFormatterRef: TimeLabelFormatterRef
 ): { label: string; minS: number; maxS: number } | null {
-  if (!feature) {
+  const sample = sampleScalarGridAtLngLat(scalarGridRef.current, lngLat.lng, lngLat.lat);
+  if (!sample) {
     return null;
   }
-
-  const minS = Number(feature.properties?.min_time_s ?? 0);
-  const maxS = Number(feature.properties?.max_time_s ?? 0);
   return {
-    minS,
-    maxS,
-    label: bucketLabel(minS, maxS, bucketLabelFormatterRef.current)
+    label: timeLabelFormatterRef.current(sample.timeS),
+    minS: sample.timeS,
+    maxS: sample.timeS
   };
 }
 
@@ -146,13 +143,12 @@ export function updateInspectMarker(
 export function handleIsochroneHover(
   maplibregl: typeof import("maplibre-gl"),
   map: MapLibreMap,
-  bucketLabelFormatterRef: BucketLabelFormatterRef,
+  timeLabelFormatterRef: TimeLabelFormatterRef,
+  scalarGridRef: ScalarGridRef,
   popupRef: MutableRefObject<MapLibrePopup | null>,
   popupTimeoutRef: MutableRefObject<number | null>,
   tapPreviewActiveRef: MutableRefObject<boolean>,
   event: {
-    features?: object[];
-    point: { x: number; y: number };
     lngLat: { lng: number; lat: number };
     originalEvent?: Event;
   }
@@ -161,14 +157,8 @@ export function handleIsochroneHover(
     return;
   }
 
-  const hoveredFeature =
-    (event.features?.[0] as Feature<MultiPolygon, GeoJsonProperties> | undefined) ??
-    (map.queryRenderedFeatures([event.point.x, event.point.y], {
-      layers: [ISOCHRONE_FILL_LAYER_ID]
-    })[0] as Feature<MultiPolygon, GeoJsonProperties> | undefined);
-
-  const bucket = featureBucketLabel(hoveredFeature, bucketLabelFormatterRef);
-  if (!bucket) {
+  const resolvedBucket = scalarGridLabel(scalarGridRef, event.lngLat, timeLabelFormatterRef);
+  if (!resolvedBucket) {
     clearIsochronePopup(popupRef, popupTimeoutRef, tapPreviewActiveRef);
     return;
   }
@@ -180,30 +170,28 @@ export function handleIsochroneHover(
 
   ensureIsochronePopup(maplibregl, popupRef)
     .setLngLat(popupCoordinates(event.lngLat))
-    .setText(bucket.label)
+    .setText(resolvedBucket.label)
     .addTo(map);
 }
 
 export function handleMapClick(
   maplibregl: typeof import("maplibre-gl"),
   map: MapLibreMap,
-  bucketLabelFormatterRef: BucketLabelFormatterRef,
+  timeLabelFormatterRef: TimeLabelFormatterRef,
+  scalarGridRef: ScalarGridRef,
   popupRef: MutableRefObject<MapLibrePopup | null>,
   popupTimeoutRef: MutableRefObject<number | null>,
   tapPreviewActiveRef: MutableRefObject<boolean>,
   onMapPointClickRef: MutableRefObject<(point: InspectCardState) => void>,
   event: {
-    point: { x: number; y: number };
     lngLat: { lng: number; lat: number };
     originalEvent?: Event;
   }
 ) {
-  const feature = map.queryRenderedFeatures([event.point.x, event.point.y], {
-    layers: [ISOCHRONE_FILL_LAYER_ID]
-  })[0] as Feature<MultiPolygon, GeoJsonProperties> | undefined;
+  const scalarBucket = scalarGridLabel(scalarGridRef, event.lngLat, timeLabelFormatterRef);
   const lat = Number(event.lngLat.lat.toFixed(5));
   const lon = Number(event.lngLat.lng.toFixed(5));
-  if (!feature) {
+  if (!scalarBucket) {
     clearIsochronePopup(popupRef, popupTimeoutRef, tapPreviewActiveRef);
     onMapPointClickRef.current({
       lat,
@@ -211,12 +199,6 @@ export function handleMapClick(
       minS: null,
       maxS: null
     });
-    return;
-  }
-
-  const bucket = featureBucketLabel(feature, bucketLabelFormatterRef);
-  if (!bucket) {
-    clearIsochronePopup(popupRef, popupTimeoutRef, tapPreviewActiveRef);
     return;
   }
 
@@ -230,13 +212,13 @@ export function handleMapClick(
 
   ensureIsochronePopup(maplibregl, popupRef)
     .setLngLat(popupCoordinates(event.lngLat))
-    .setText(bucket.label)
+    .setText(scalarBucket.label)
     .addTo(map);
   onMapPointClickRef.current({
     lat,
     lon,
-    minS: bucket.minS,
-    maxS: bucket.maxS
+    minS: scalarBucket.minS,
+    maxS: scalarBucket.maxS
   });
   popupTimeoutRef.current = window.setTimeout(() => {
     tapPreviewActiveRef.current = false;

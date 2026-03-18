@@ -1,19 +1,24 @@
-export type FeatureGeometry = {
-  type: "MultiPolygon";
-  coordinates: number[][][][];
-};
-
-export type IsochroneFeature = {
-  type: "Feature";
-  properties: {
-    bucket_index: number;
-    bucket_size_s: number;
-    min_time_s: number;
-    max_time_s: number;
-    cell_count: number;
-    polygon_count: number;
+export type IsochroneScalarGrid = {
+  topology: {
+    min_lat: number;
+    min_lon: number;
+    lat_step: number;
+    lon_step: number;
   };
-  geometry: FeatureGeometry;
+  grid: {
+    min_row: number;
+    min_col: number;
+    row_count: number;
+    col_count: number;
+    values: Array<number | null>;
+  };
+  bounds: {
+    west: number;
+    south: number;
+    east: number;
+    north: number;
+  };
+  max_time_s: number;
 };
 
 export type IsochroneResponse = {
@@ -27,13 +32,8 @@ export type IsochroneResponse = {
     total_linked_cells: number;
     compute_max_time_s: number;
     render_max_time_s: number;
-    bucket_size_s: number;
-    bucket_count: number;
   };
-  feature_collection: {
-    type: "FeatureCollection";
-    features: IsochroneFeature[];
-  };
+  scalar_grid: IsochroneScalarGrid | null;
 };
 
 export type MultiOrigin = {
@@ -49,7 +49,7 @@ export type MultiIsochroneResponse = {
     origin_count: number;
     origin_seed_counts: Record<string, number>;
   };
-  feature_collection: IsochroneResponse["feature_collection"];
+  scalar_grid: IsochroneScalarGrid | null;
 };
 
 export type PathSegment = {

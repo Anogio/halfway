@@ -3,8 +3,7 @@ import test from "node:test";
 
 import {
   buildDisplayPathSteps,
-  formatDuration,
-  smoothFeatureCollection
+  formatDuration
 } from "../src/lib/heatmapPresentation.mjs";
 
 test("formatDuration formats minutes and hours", () => {
@@ -53,8 +52,4 @@ test("buildDisplayPathSteps groups consecutive rides on same line", () => {
   assert.equal(steps.length, 2);
   assert.match(steps[0].text, /Ride 9: A -> C/);
   assert.match(steps[1].text, /Transfer \(1 min\)/);
-});
-
-test("smoothFeatureCollection returns null when no data", () => {
-  assert.equal(smoothFeatureCollection(null), null);
 });

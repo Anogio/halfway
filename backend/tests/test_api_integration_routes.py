@@ -118,7 +118,8 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(multi_isochrones.status_code, 200)
         multi_iso_payload = multi_isochrones.json()
         self.assertNotIn("stats", multi_iso_payload)
-        self.assertEqual(multi_iso_payload["feature_collection"]["type"], "FeatureCollection")
+        self.assertIn("scalar_grid", multi_iso_payload)
+        self.assertNotIn("feature_collection", multi_iso_payload)
         self.assertEqual(self.load_calls, ["paris"])
 
         multi_path = self.client.post(
@@ -170,6 +171,22 @@ class ApiRoutesIntegrationTest(ApiIntegrationTestCase):
         self.assertEqual(multi_path.status_code, 200)
         multi_path_payload = multi_path.json()
         self.assertIn("stats", multi_path_payload["paths"][0])
+
+    def test_multi_isochrones_returns_scalar_grid(self) -> None:
+        response = self.client.post(
+            "/multi_isochrones",
+            json={
+                "city": "paris_fr",
+                "origins": [{"id": "origin-1", "lat": 48.8566, "lon": 2.3522}],
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("scalar_grid", payload)
+        self.assertNotIn("feature_collection", payload)
+        self.assertEqual(sorted(payload["scalar_grid"].keys()), ["bounds", "grid", "max_time_s", "topology"])
+        self.assertGreater(payload["scalar_grid"]["grid"]["row_count"], 0)
+        self.assertGreater(payload["scalar_grid"]["grid"]["col_count"], 0)
 
     def test_multi_path_uses_single_runtime(self) -> None:
         runtime = RuntimeData(

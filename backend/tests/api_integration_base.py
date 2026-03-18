@@ -25,7 +25,6 @@ class ApiIntegrationTestCase(unittest.TestCase):
             "isochrone_render_max_time_s": 3600,
             "max_seed_nodes": 24,
             "walk_speed_mps": 1.2,
-            "isochrone_bucket_size_s": 300,
         }
 
         def runtime_loader(city_id: str) -> CityRuntimeState:

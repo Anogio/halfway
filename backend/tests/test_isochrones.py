@@ -2,36 +2,34 @@ from __future__ import annotations
 
 import unittest
 
-from transit_backend.core.isochrones import GridTopology, build_isochrone_feature_collection
+from transit_backend.core.isochrones import (
+    GridTopology,
+    build_isochrone_scalar_grid,
+)
 
 
 class IsochroneDissolveTest(unittest.TestCase):
-    def test_same_bucket_cells_are_dissolved_into_single_polygon(self) -> None:
+    def test_scalar_grid_captures_sparse_values_and_bounds(self) -> None:
         topology = GridTopology(min_lat=0.0, min_lon=0.0, lat_step=1.0, lon_step=1.0)
-        # L-shape in one 5-minute bucket. A rectangle-only merge would split this.
         cells = [
             {"cell_id": 1, "lat": 0.0, "lon": 0.0, "time_s": 120},
-            {"cell_id": 2, "lat": 0.0, "lon": 1.0, "time_s": 150},
-            {"cell_id": 3, "lat": 1.0, "lon": 0.0, "time_s": 210},
+            {"cell_id": 2, "lat": 1.0, "lon": 1.0, "time_s": 420},
         ]
 
-        collection = build_isochrone_feature_collection(
-            cells,
+        grid = build_isochrone_scalar_grid(
+            cells=cells,
             topology=topology,
-            bucket_size_s=300,
             max_time_s=1800,
         )
 
-        self.assertEqual(collection["type"], "FeatureCollection")
-        self.assertEqual(len(collection["features"]), 1)
-
-        feature = collection["features"][0]
-        self.assertEqual(feature["properties"]["bucket_index"], 0)
-        self.assertEqual(feature["properties"]["polygon_count"], 1)
-
-        coordinates = feature["geometry"]["coordinates"]
-        self.assertEqual(len(coordinates), 1)
-        self.assertEqual(len(coordinates[0]), 1)
-        outer_ring = coordinates[0][0]
-        self.assertGreaterEqual(len(outer_ring), 7)
-
+        self.assertIsNotNone(grid)
+        assert grid is not None
+        self.assertEqual(grid["grid"]["min_row"], 0)
+        self.assertEqual(grid["grid"]["min_col"], 0)
+        self.assertEqual(grid["grid"]["row_count"], 2)
+        self.assertEqual(grid["grid"]["col_count"], 2)
+        self.assertEqual(grid["grid"]["values"], [120, None, None, 420])
+        self.assertEqual(
+            grid["bounds"],
+            {"west": -0.5, "south": -0.5, "east": 1.5, "north": 1.5},
+        )

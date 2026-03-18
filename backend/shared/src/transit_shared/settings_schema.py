@@ -69,7 +69,6 @@ class GridSettings:
 class RuntimeSettings:
     max_time_s: int
     max_seed_nodes: int
-    isochrone_bucket_size_s: int
 
 
 @dataclass(frozen=True)

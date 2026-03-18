@@ -33,7 +33,6 @@ max_candidates_per_cell = 12
 [runtime]
 max_time_s = 3600
 max_seed_nodes = 24
-isochrone_bucket_size_s = 300
 
 [graph]
 max_interstop_ride_s = 10800

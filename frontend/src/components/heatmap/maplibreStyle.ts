@@ -1,38 +1,16 @@
-import type { ExpressionSpecification, Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
+import type { Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
 import type { FeatureCollection } from "geojson";
 
 import { EMPTY_FEATURE_COLLECTION } from "@/components/heatmap/maplibreData";
 import {
-  ISOCHRONE_FILL_LAYER_ID,
-  ISOCHRONE_LINE_LAYER_ID,
-  ISOCHRONE_SOURCE_ID,
+  ISOCHRONE_RASTER_LAYER_ID,
+  ISOCHRONE_RASTER_SOURCE_ID,
   ORIGIN_LAYER_ID,
   ORIGIN_SOURCE_ID,
   PATH_LINE_LAYER_ID,
   PATH_POINT_LAYER_ID,
   PATH_SOURCE_ID
 } from "@/components/heatmap/maplibreIds";
-
-const ISOCHRONE_COLOR_STOPS: Array<[number, string]> = [
-  [0, "rgb(21 48 122)"],
-  [300, "rgb(18 95 181)"],
-  [600, "rgb(0 141 213)"],
-  [900, "rgb(0 181 180)"],
-  [1200, "rgb(117 205 58)"],
-  [1500, "rgb(236 221 68)"],
-  [1800, "rgb(250 171 56)"],
-  [2700, "rgb(230 93 66)"],
-  [3600, "rgb(174 36 69)"]
-];
-
-function isochroneFillColorExpression(): ExpressionSpecification {
-  return [
-    "interpolate",
-    ["linear"],
-    ["coalesce", ["to-number", ["get", "max_time_s"]], 0],
-    ...ISOCHRONE_COLOR_STOPS.flatMap(([seconds, color]) => [seconds, color])
-  ] as ExpressionSpecification;
-}
 
 export function createRasterStyle(): StyleSpecification {
   return {
@@ -60,39 +38,6 @@ export function createRasterStyle(): StyleSpecification {
 }
 
 export function ensureOverlaySourcesAndLayers(map: MapLibreMap) {
-  if (!map.getSource(ISOCHRONE_SOURCE_ID)) {
-    map.addSource(ISOCHRONE_SOURCE_ID, {
-      type: "geojson",
-      data: EMPTY_FEATURE_COLLECTION
-    });
-  }
-  if (!map.getLayer(ISOCHRONE_FILL_LAYER_ID)) {
-    map.addLayer({
-      id: ISOCHRONE_FILL_LAYER_ID,
-      type: "fill",
-      source: ISOCHRONE_SOURCE_ID,
-      paint: {
-        "fill-color": isochroneFillColorExpression(),
-        "fill-opacity": 0.44
-      }
-    });
-  }
-  if (!map.getLayer(ISOCHRONE_LINE_LAYER_ID)) {
-    map.addLayer({
-      id: ISOCHRONE_LINE_LAYER_ID,
-      type: "line",
-      source: ISOCHRONE_SOURCE_ID,
-      paint: {
-        "line-color": isochroneFillColorExpression(),
-        "line-width": 1,
-        "line-opacity": 0.9
-      },
-      layout: {
-        "line-join": "round",
-        "line-cap": "round"
-      }
-    });
-  }
   if (!map.getSource(PATH_SOURCE_ID)) {
     map.addSource(PATH_SOURCE_ID, {
       type: "geojson",
@@ -158,4 +103,50 @@ export function updateGeoJsonSource(map: MapLibreMap, sourceId: string, data: Fe
     return;
   }
   source.setData(data);
+}
+
+type RasterOverlay = {
+  imageUrl: string;
+  coordinates: [[number, number], [number, number], [number, number], [number, number]];
+};
+
+export function updateIsochroneRasterSource(map: MapLibreMap, overlay: RasterOverlay | null) {
+  const existingLayer = map.getLayer(ISOCHRONE_RASTER_LAYER_ID);
+  const existingSource = map.getSource(ISOCHRONE_RASTER_SOURCE_ID) as
+    | { updateImage?: (options: { url: string; coordinates: RasterOverlay["coordinates"] }) => void }
+    | undefined;
+
+  if (!overlay) {
+    if (existingLayer) {
+      map.removeLayer(ISOCHRONE_RASTER_LAYER_ID);
+    }
+    if (existingSource) {
+      map.removeSource(ISOCHRONE_RASTER_SOURCE_ID);
+    }
+    return;
+  }
+
+  if (!existingSource) {
+    map.addSource(ISOCHRONE_RASTER_SOURCE_ID, {
+      type: "image",
+      url: overlay.imageUrl,
+      coordinates: overlay.coordinates
+    });
+  } else {
+    existingSource.updateImage?.({
+      url: overlay.imageUrl,
+      coordinates: overlay.coordinates
+    });
+  }
+
+  if (!map.getLayer(ISOCHRONE_RASTER_LAYER_ID)) {
+    map.addLayer({
+      id: ISOCHRONE_RASTER_LAYER_ID,
+      type: "raster",
+      source: ISOCHRONE_RASTER_SOURCE_ID,
+      paint: {
+        "raster-opacity": 1
+      }
+    }, PATH_LINE_LAYER_ID);
+  }
 }

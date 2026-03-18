@@ -1,14 +1,10 @@
 import { useEffect, useRef } from "react";
 import type { Map as MapLibreMap, Marker as MapLibreMarker, Popup as MapLibrePopup } from "maplibre-gl";
 
-import type { MultiPathItemResponse } from "@/lib/api";
+import type { IsochroneScalarGrid, MultiPathItemResponse } from "@/lib/api";
 import type { InspectCardState, OriginPoint } from "@/components/heatmap/types";
 import type { TransitMapDebugHandle } from "@/components/heatmap/mapDebug";
-import {
-  buildIsochroneSourceData,
-  buildOriginSourceData,
-  buildPathSourceData
-} from "@/components/heatmap/maplibreData";
+import { buildOriginSourceData, buildPathSourceData } from "@/components/heatmap/maplibreData";
 import { createMapLibreDebugHandle, setBoundsAndView } from "@/components/heatmap/maplibreDebug";
 import {
   clearIsochronePopup,
@@ -16,23 +12,20 @@ import {
   handleMapClick,
   updateInspectMarker
 } from "@/components/heatmap/maplibreInteractions";
-import {
-  ISOCHRONE_FILL_LAYER_ID,
-  ISOCHRONE_SOURCE_ID,
-  ORIGIN_SOURCE_ID,
-  PATH_SOURCE_ID
-} from "@/components/heatmap/maplibreIds";
+import { ORIGIN_SOURCE_ID, PATH_SOURCE_ID } from "@/components/heatmap/maplibreIds";
 import {
   createRasterStyle,
   ensureOverlaySourcesAndLayers,
+  updateIsochroneRasterSource,
   updateGeoJsonSource
 } from "@/components/heatmap/maplibreStyle";
+import { buildScalarRasterOverlay } from "@/components/heatmap/scalarGrid";
 
 type UseMapLibreMapArgs = {
   defaultView: [number, number, number] | null;
   maxBoundsBbox: [number, number, number, number] | null;
-  displayFeatureCollection: unknown;
-  bucketLabelFormatter: (minMinutes: number, maxMinutes: number) => string;
+  scalarGrid: IsochroneScalarGrid | null | undefined;
+  timeLabelFormatter: (seconds: number) => string;
   origins: OriginPoint[];
   pathByOriginId: Record<string, MultiPathItemResponse | null>;
   inspectCard: InspectCardState | null;
@@ -49,8 +42,8 @@ declare global {
 export function useMapLibreMap({
   defaultView,
   maxBoundsBbox,
-  displayFeatureCollection,
-  bucketLabelFormatter,
+  scalarGrid,
+  timeLabelFormatter,
   origins,
   pathByOriginId,
   inspectCard,
@@ -60,9 +53,9 @@ export function useMapLibreMap({
   const mapRef = useRef<HTMLDivElement | null>(null);
   const mapInstanceRef = useRef<MapLibreMap | null>(null);
   const maplibreRef = useRef<typeof import("maplibre-gl") | null>(null);
-  const bucketLabelFormatterRef = useRef(bucketLabelFormatter);
+  const timeLabelFormatterRef = useRef(timeLabelFormatter);
+  const scalarGridRef = useRef(scalarGrid);
   const onMapPointClickRef = useRef(onMapPointClick);
-  const displayFeatureCollectionRef = useRef(displayFeatureCollection);
   const originsRef = useRef(origins);
   const pathByOriginIdRef = useRef(pathByOriginId);
   const inspectCardRef = useRef(inspectCard);
@@ -81,16 +74,16 @@ export function useMapLibreMap({
   const bboxMaxLat = maxBoundsBbox?.[3] ?? null;
 
   useEffect(() => {
-    bucketLabelFormatterRef.current = bucketLabelFormatter;
-  }, [bucketLabelFormatter]);
+    timeLabelFormatterRef.current = timeLabelFormatter;
+  }, [timeLabelFormatter]);
+
+  useEffect(() => {
+    scalarGridRef.current = scalarGrid;
+  }, [scalarGrid]);
 
   useEffect(() => {
     onMapPointClickRef.current = onMapPointClick;
   }, [onMapPointClick]);
-
-  useEffect(() => {
-    displayFeatureCollectionRef.current = displayFeatureCollection;
-  }, [displayFeatureCollection]);
 
   useEffect(() => {
     originsRef.current = origins;
@@ -153,22 +146,19 @@ export function useMapLibreMap({
         }
         ensureOverlaySourcesAndLayers(map);
         setBoundsAndView(map, defaultViewTuple, maxBoundsTuple);
-        map.on("mouseenter", ISOCHRONE_FILL_LAYER_ID, () => {
-          map.getCanvas().style.cursor = "pointer";
-        });
-        map.on("mousemove", ISOCHRONE_FILL_LAYER_ID, (event) => {
+        map.on("mousemove", (event) => {
           handleIsochroneHover(
             maplibregl,
             map,
-            bucketLabelFormatterRef,
+            timeLabelFormatterRef,
+            scalarGridRef,
             isochronePopupRef,
             isochronePopupTimeoutRef,
             isochroneTapPreviewActiveRef,
             event
           );
         });
-        map.on("mouseleave", ISOCHRONE_FILL_LAYER_ID, () => {
-          map.getCanvas().style.cursor = "";
+        map.on("mouseout", () => {
           if (isochroneTapPreviewActiveRef.current) {
             return;
           }
@@ -178,11 +168,7 @@ export function useMapLibreMap({
             isochroneTapPreviewActiveRef
           );
         });
-        updateGeoJsonSource(
-          map,
-          ISOCHRONE_SOURCE_ID,
-          buildIsochroneSourceData(displayFeatureCollectionRef.current)
-        );
+        updateIsochroneRasterSource(map, buildScalarRasterOverlay(scalarGridRef.current));
         updateGeoJsonSource(
           map,
           PATH_SOURCE_ID,
@@ -203,7 +189,8 @@ export function useMapLibreMap({
         handleMapClick(
           maplibregl,
           map,
-          bucketLabelFormatterRef,
+          timeLabelFormatterRef,
+          scalarGridRef,
           isochronePopupRef,
           isochronePopupTimeoutRef,
           isochroneTapPreviewActiveRef,
@@ -272,8 +259,8 @@ export function useMapLibreMap({
     if (!map) {
       return;
     }
-    updateGeoJsonSource(map, ISOCHRONE_SOURCE_ID, buildIsochroneSourceData(displayFeatureCollection));
-  }, [displayFeatureCollection]);
+    updateIsochroneRasterSource(map, buildScalarRasterOverlay(scalarGrid));
+  }, [scalarGrid]);
 
   useEffect(() => {
     const map = mapInstanceRef.current;

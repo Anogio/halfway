@@ -223,10 +223,6 @@ def parse_settings(data: Mapping[str, Any]) -> AppSettings:
         runtime=RuntimeSettings(
             max_time_s=_as_int(_get_required(runtime, "max_time_s"), "runtime.max_time_s"),
             max_seed_nodes=_as_int(_get_required(runtime, "max_seed_nodes"), "runtime.max_seed_nodes"),
-            isochrone_bucket_size_s=_as_int(
-                _get_required(runtime, "isochrone_bucket_size_s"),
-                "runtime.isochrone_bucket_size_s",
-            ),
         ),
         graph=GraphSettings(
             max_interstop_ride_s=_as_int(

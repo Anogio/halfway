@@ -1,5 +1,3 @@
-export const SMOOTHING_ITERATIONS = 1;
-
 export function bucketLabel(minS, maxS, formatter) {
   const minM = Math.floor(minS / 60);
   const maxM = Math.ceil(maxS / 60);
@@ -132,59 +130,4 @@ export function buildDisplayPathSteps(pathData, presentationMessages) {
 
   flushRide();
   return steps;
-}
-
-export function smoothFeatureCollection(data) {
-  const featureCollection = data?.feature_collection;
-  if (!featureCollection) {
-    return null;
-  }
-  return {
-    ...featureCollection,
-    features: featureCollection.features.map((feature) => ({
-      ...feature,
-      geometry: {
-        ...feature.geometry,
-        coordinates: feature.geometry.coordinates.map((polygon) =>
-          polygon.map((ring) => smoothRing(ring, SMOOTHING_ITERATIONS))
-        )
-      }
-    }))
-  };
-}
-
-function smoothRing(ring, iterations) {
-  if (iterations <= 0 || ring.length < 4) {
-    return ring;
-  }
-
-  let current = ring;
-  for (let iter = 0; iter < iterations; iter += 1) {
-    current = chaikin(current);
-  }
-  return current;
-}
-
-function chaikin(ring) {
-  if (ring.length < 4) {
-    return ring;
-  }
-
-  const last = ring[ring.length - 1];
-  const first = ring[0];
-  const isClosed = last[0] === first[0] && last[1] === first[1];
-  const pts = isClosed ? ring.slice(0, -1) : ring.slice();
-  if (pts.length < 3) {
-    return ring;
-  }
-
-  const next = [];
-  for (let i = 0; i < pts.length; i += 1) {
-    const p0 = pts[i];
-    const p1 = pts[(i + 1) % pts.length];
-    next.push([0.75 * p0[0] + 0.25 * p1[0], 0.75 * p0[1] + 0.25 * p1[1]]);
-    next.push([0.25 * p0[0] + 0.75 * p1[0], 0.25 * p0[1] + 0.75 * p1[1]]);
-  }
-  next.push(next[0]);
-  return next;
 }

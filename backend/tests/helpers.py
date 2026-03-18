@@ -22,7 +22,7 @@ _BASE_SETTINGS_DATA = {
     },
     "weights": {"walk_speed_mps": 1.2, "transfer_penalty_s": 180, "wait_cap_s": 600},
     "grid": {"cell_size_m": 250, "max_candidates_per_cell": 12},
-    "runtime": {"max_time_s": 3600, "max_seed_nodes": 24, "isochrone_bucket_size_s": 300},
+    "runtime": {"max_time_s": 3600, "max_seed_nodes": 24},
     "graph": {"max_interstop_ride_s": 10800},
     "cities": {
         "paris": {

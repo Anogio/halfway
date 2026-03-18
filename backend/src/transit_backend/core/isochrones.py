@@ -1,25 +1,21 @@
 from __future__ import annotations
 
-from collections import defaultdict
-
-from transit_backend.core.isochrone_polygons import dissolve_cells_to_multipolygon
 from transit_backend.core.isochrone_topology import GridTopology, infer_grid_topology
 
-__all__ = ["GridTopology", "infer_grid_topology", "build_isochrone_feature_collection"]
+__all__ = [
+    "GridTopology",
+    "infer_grid_topology",
+    "build_isochrone_scalar_grid",
+]
 
 
-def build_isochrone_feature_collection(
+def build_isochrone_scalar_grid(
+    *,
     cells: list[dict[str, object]],
     topology: GridTopology,
-    bucket_size_s: int,
     max_time_s: int,
-) -> dict[str, object]:
-    if bucket_size_s <= 0:
-        raise ValueError("bucket_size_s must be > 0")
-
-    cells_by_bucket: dict[int, set[tuple[int, int]]] = defaultdict(set)
-    cell_counts: dict[int, int] = defaultdict(int)
-
+) -> dict[str, object] | None:
+    values_by_cell: dict[tuple[int, int], int] = {}
     for cell in cells:
         lat = float(cell["lat"])
         lon = float(cell["lon"])
@@ -29,41 +25,50 @@ def build_isochrone_feature_collection(
 
         row = int(round((lat - topology.min_lat) / topology.lat_step))
         col = int(round((lon - topology.min_lon) / topology.lon_step))
-        bucket_index = max(0, time_s // bucket_size_s)
+        values_by_cell[(row, col)] = time_s
 
-        cells_by_bucket[bucket_index].add((row, col))
-        cell_counts[bucket_index] += 1
+    if not values_by_cell:
+        return None
 
-    features: list[dict[str, object]] = []
-    for bucket_index in sorted(cells_by_bucket):
-        min_time_s = bucket_index * bucket_size_s
-        max_time_bound_s = min((bucket_index + 1) * bucket_size_s, max_time_s)
-        if min_time_s > max_time_s:
-            continue
+    rows = [row for row, _ in values_by_cell]
+    cols = [col for _, col in values_by_cell]
+    min_row = min(rows)
+    max_row = max(rows)
+    min_col = min(cols)
+    max_col = max(cols)
+    row_count = max_row - min_row + 1
+    col_count = max_col - min_col + 1
 
-        multipolygon_coords = dissolve_cells_to_multipolygon(
-            cells_by_bucket[bucket_index],
-            topology=topology,
-        )
-        if not multipolygon_coords:
-            continue
+    values: list[int | None] = [None] * (row_count * col_count)
+    for (row, col), time_s in values_by_cell.items():
+        row_idx = row - min_row
+        col_idx = col - min_col
+        values[row_idx * col_count + col_idx] = time_s
 
-        features.append(
-            {
-                "type": "Feature",
-                "properties": {
-                    "bucket_index": bucket_index,
-                    "bucket_size_s": bucket_size_s,
-                    "min_time_s": min_time_s,
-                    "max_time_s": max_time_bound_s,
-                    "cell_count": cell_counts[bucket_index],
-                    "polygon_count": len(multipolygon_coords),
-                },
-                "geometry": {
-                    "type": "MultiPolygon",
-                    "coordinates": multipolygon_coords,
-                },
-            }
-        )
+    west = round(topology.min_lon + (min_col - 0.5) * topology.lon_step, 7)
+    south = round(topology.min_lat + (min_row - 0.5) * topology.lat_step, 7)
+    east = round(topology.min_lon + (max_col + 0.5) * topology.lon_step, 7)
+    north = round(topology.min_lat + (max_row + 0.5) * topology.lat_step, 7)
 
-    return {"type": "FeatureCollection", "features": features}
+    return {
+        "topology": {
+            "min_lat": topology.min_lat,
+            "min_lon": topology.min_lon,
+            "lat_step": topology.lat_step,
+            "lon_step": topology.lon_step,
+        },
+        "grid": {
+            "min_row": min_row,
+            "min_col": min_col,
+            "row_count": row_count,
+            "col_count": col_count,
+            "values": values,
+        },
+        "bounds": {
+            "west": west,
+            "south": south,
+            "east": east,
+            "north": north,
+        },
+        "max_time_s": max_time_s,
+    }

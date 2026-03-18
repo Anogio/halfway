@@ -48,7 +48,12 @@ def build_multi_isochrones_response(
     city_id = _resolve_internal_city_id(app_state, city_id)
     manager = get_city_runtime_manager(app_state)
     with manager.use_city(city_id) as city_state:
-        return compute_multi_isochrones_response(app_state, city_state, origins, include_stats=debug)
+        return compute_multi_isochrones_response(
+            app_state,
+            city_state,
+            origins,
+            include_stats=debug,
+        )
 
 
 def build_multi_path_response(app_state: AppState, payload: dict[str, object]) -> dict[str, object]:
@@ -145,7 +150,6 @@ def compute_multi_isochrones_response(
         max_seed_nodes=params["max_seed_nodes"],
         walk_speed_mps=params["walk_speed_mps"],
         max_time_s=max_time_s,
-        bucket_size_s=int(params["isochrone_bucket_size_s"]),
         cached_origin_cells=cached_origin_cells,
         cached_seed_counts=cached_seed_counts,
         include_stats=include_stats,

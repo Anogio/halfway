@@ -7,6 +7,7 @@
 - If a new translation key is added, both language files must be updated in the same change.
 - Keep routing and isochrone debug statistics behind an explicit request-level `debug` flag that defaults to `false`.
 - Do not compute expensive debug-only routing or isochrone statistics on the default production path.
+- Store project plans, implementation option writeups, and similar planning documents in `docs/debug/` unless the user explicitly asks for a different location.
 - Keep a stable browser-automation map adapter on `window.__transitMap` with `getSize()`, `containerPointToLatLng()`, `fire("click", { latlng })`, and only the minimal extra debug helpers that are actually used by the Playwright flows.
 - When changing map libraries, update Playwright selectors/helpers away from library-specific DOM classes (`leaflet-*`, etc.) and preserve the `window.__transitMap` contract.
 - For browser debugging of map interactions, prefer Playwright scripts/tests that use `window.__transitMap` over fragile canvas ref clicks.

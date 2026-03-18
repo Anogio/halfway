@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 
-import { smoothFeatureCollection } from "@/lib/heatmapPresentation.mjs";
+import { formatDuration } from "@/lib/heatmapPresentation.mjs";
 import HeatmapViewFrame from "@/components/heatmap/HeatmapViewFrame";
 import { useHeatmapController } from "@/components/heatmap/useHeatmapController";
 import { useMapLibreMap } from "@/components/heatmap/useMapLibreMap";
@@ -14,16 +14,16 @@ export default function HeatmapView() {
   const controller = useHeatmapController();
   useViewportHeightCssVar();
 
-  const displayFeatureCollection = useMemo(
-    () => smoothFeatureCollection(controller.data),
-    [controller.data]
+  const timeLabelFormatter = useMemo(
+    () => (seconds: number) => formatDuration(seconds, messages.presentation.duration),
+    [messages.presentation.duration]
   );
 
   const { mapRef } = useMapLibreMap({
     defaultView: controller.defaultView,
     maxBoundsBbox: controller.mapBbox,
-    displayFeatureCollection,
-    bucketLabelFormatter: messages.presentation.bucketLabel,
+    scalarGrid: controller.data?.scalar_grid,
+    timeLabelFormatter,
     origins: controller.origins,
     pathByOriginId: controller.pathByOriginId,
     inspectCard: controller.inspectCard,

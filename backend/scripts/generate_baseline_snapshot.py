@@ -56,8 +56,16 @@ def main() -> None:
             {
                 "keys": sorted(list(isochrones.keys())),
                 "stats": isochrones.get("stats", {}),
-                "feature_count": len(isochrones.get("feature_collection", {}).get("features", [])),
-                "first_feature": (isochrones.get("feature_collection", {}).get("features") or [None])[0],
+                "has_scalar_grid": "scalar_grid" in isochrones,
+                "scalar_grid_shape": {
+                    "row_count": (isochrones.get("scalar_grid") or {}).get("grid", {}).get("row_count"),
+                    "col_count": (isochrones.get("scalar_grid") or {}).get("grid", {}).get("col_count"),
+                    "non_null_values": sum(
+                        1
+                        for value in ((isochrones.get("scalar_grid") or {}).get("grid", {}).get("values") or [])
+                        if value is not None
+                    ),
+                },
             },
             indent=2,
         ),

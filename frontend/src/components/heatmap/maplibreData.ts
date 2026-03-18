@@ -9,22 +9,6 @@ export const EMPTY_FEATURE_COLLECTION: FeatureCollection = {
   features: []
 };
 
-function isFeatureCollection(value: unknown): value is FeatureCollection {
-  return Boolean(
-    value &&
-      typeof value === "object" &&
-      (value as { type?: unknown }).type === "FeatureCollection" &&
-      Array.isArray((value as { features?: unknown }).features)
-  );
-}
-
-export function buildIsochroneSourceData(displayFeatureCollection: unknown): FeatureCollection {
-  if (!isFeatureCollection(displayFeatureCollection)) {
-    return EMPTY_FEATURE_COLLECTION;
-  }
-  return displayFeatureCollection;
-}
-
 export function buildPathSourceData(
   origins: OriginPoint[],
   pathByOriginId: Record<string, MultiPathItemResponse | null>
