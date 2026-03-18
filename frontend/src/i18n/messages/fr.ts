@@ -78,6 +78,7 @@ export const frMessages: Messages = {
     noPath: "Aucun trajet",
     removeOriginAriaLabel: (originLabel: string) => `Retirer ${originLabel}`,
     pathDetailsAriaLabel: (originLabel: string) => `Détails du trajet pour ${originLabel}`,
+    showPathDetailsAriaLabel: (originLabel: string) => `Afficher les détails du trajet pour ${originLabel}`,
     selectDestinationToComputePaths: "Sélectionnez une destination sur la carte pour calculer les trajets.",
     pathNotComputedYet: "Trajet pas encore calculé pour ce point.",
     pathTotalLabel: "Durée totale",

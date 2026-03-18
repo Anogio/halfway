@@ -71,6 +71,7 @@ export type Messages = {
     noPath: string;
     removeOriginAriaLabel: (originLabel: string) => string;
     pathDetailsAriaLabel: (originLabel: string) => string;
+    showPathDetailsAriaLabel: (originLabel: string) => string;
     selectDestinationToComputePaths: string;
     pathNotComputedYet: string;
     pathTotalLabel: string;

@@ -78,6 +78,7 @@ export const enMessages: Messages = {
     noPath: "No path",
     removeOriginAriaLabel: (originLabel: string) => `Remove ${originLabel}`,
     pathDetailsAriaLabel: (originLabel: string) => `${originLabel} path details`,
+    showPathDetailsAriaLabel: (originLabel: string) => `Show ${originLabel} path details`,
     selectDestinationToComputePaths: "Select a destination on the map to compute paths.",
     pathNotComputedYet: "Path not computed yet for this point.",
     pathTotalLabel: "Path total",

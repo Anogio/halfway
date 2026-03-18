@@ -1,13 +1,16 @@
 .inspect-card {
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
-  border: var(--paper-border);
-  background: rgba(255, 253, 247, 0.89);
-  backdrop-filter: blur(3px);
+  border-radius: 18px;
+  border: 1px solid rgba(214, 200, 173, 0.72);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 246, 0.84) 0%, rgba(255, 251, 244, 0.78) 100%);
+  backdrop-filter: blur(14px);
   color: var(--fg);
-  box-shadow: var(--shadow-soft);
-  padding: 0.78rem 0.82rem;
+  box-shadow:
+    0 16px 36px rgba(38, 33, 22, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  padding: 0.72rem 0.76rem;
   z-index: var(--z-inspect);
 }
 
@@ -20,10 +23,14 @@
   overflow: hidden;
 }
 
+.inspect-fixed.is-compact {
+  max-height: min(30dvh, 320px);
+}
+
 .inspect-card p {
   margin: 0 0 0.35rem;
   color: var(--fg);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
 }
 
 .inspect-header {
@@ -31,27 +38,27 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.55rem;
-  margin-bottom: 0.72rem;
+  margin-bottom: 0.58rem;
 }
 
 .inspect-title {
   margin: 0;
-  font-size: 0.96rem;
+  font-size: 0.92rem;
   line-height: 1.1;
   letter-spacing: 0.01em;
 }
 
 .inspect-count {
-  min-width: 1.8rem;
-  min-height: 1.8rem;
-  padding: 0 0.45rem;
+  min-width: 1.7rem;
+  min-height: 1.7rem;
+  padding: 0 0.42rem;
   border-radius: 999px;
-  background: rgba(32, 51, 71, 0.08);
-  color: #30485e;
+  background: rgba(32, 51, 71, 0.07);
+  color: #365067;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 800;
 }
 
@@ -67,20 +74,20 @@
 
 .inspect-add-mode-hint {
   margin-top: 0;
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.48rem;
   color: #1f4361;
   font-weight: 700;
 }
 
 .inspect-selection-hint {
-  margin-bottom: 0.62rem;
+  margin-bottom: 0.45rem;
   color: #4a6178;
   font-weight: 600;
 }
 
 .inspect-empty-state {
   flex: 1;
-  min-height: 140px;
+  min-height: 108px;
   display: grid;
   place-items: center;
   text-align: center;
@@ -90,7 +97,7 @@
   max-width: 20ch;
   margin: 0;
   color: #486078;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 

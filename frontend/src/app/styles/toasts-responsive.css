@@ -47,11 +47,17 @@
     top: calc(max(0.85rem, env(safe-area-inset-top)) + 6.6rem);
     left: 0.95rem;
     right: auto;
-    bottom: calc(max(0.85rem, env(safe-area-inset-bottom)) + 0.22rem);
+    bottom: auto;
     width: min(440px, calc(100vw - 470px - 2.2rem));
     max-width: calc(100vw - 470px - 2.2rem);
     min-height: 320px;
-    max-height: none;
+    max-height: min(78dvh, calc(100dvh - (max(0.85rem, env(safe-area-inset-top)) + 6.6rem) - 1rem));
+  }
+
+  .inspect-fixed.is-compact {
+    bottom: auto;
+    min-height: 0;
+    max-height: min(420px, calc(100dvh - (max(0.85rem, env(safe-area-inset-top)) + 6.6rem) - 1rem));
   }
 }
 
@@ -125,5 +131,13 @@
   .onboarding-overlay {
     background: rgba(243, 239, 229, 0.68);
     padding-top: calc(max(0.8rem, env(safe-area-inset-top)) + 2.9rem);
+  }
+
+  .inspect-fixed {
+    max-height: min(42dvh, 420px);
+  }
+
+  .inspect-fixed.is-compact {
+    max-height: min(28dvh, 260px);
   }
 }

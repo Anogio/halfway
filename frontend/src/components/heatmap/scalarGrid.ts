@@ -3,7 +3,7 @@ import type { IsochroneScalarGrid } from "@/lib/api";
 const DEFAULT_UPSCALE = 8;
 const DEFAULT_BLUR_RADIUS = 6;
 const DEFAULT_BLUR_SIGMA = 2.4;
-const DEFAULT_ALPHA = 0.58;
+const DEFAULT_ALPHA = 0.54;
 const MIN_VISIBLE_COVERAGE = 0.015;
 const COMPONENT_FADE_START_CELLS = 2;
 const COMPONENT_FADE_FULL_CELLS = 6;
@@ -153,10 +153,11 @@ export function buildScalarRasterOverlay(
     const timeS = blurredValues[idx] / weight;
     const [r, g, b] = interpolateColor(timeS, grid.max_time_s);
     const coverage = Math.max(0, Math.min(weight, 1));
+    const alpha = computeOverlayAlpha(timeS, grid.max_time_s, coverage);
     rgba[base] = r;
     rgba[base + 1] = g;
     rgba[base + 2] = b;
-    rgba[base + 3] = Math.round(255 * DEFAULT_ALPHA * Math.pow(coverage, 0.92));
+    rgba[base + 3] = Math.round(255 * alpha);
   }
 
   const canvas = document.createElement("canvas");
@@ -312,6 +313,17 @@ function componentSizeStrength(size: number): number {
     (size - COMPONENT_FADE_START_CELLS) /
     (COMPONENT_FADE_FULL_CELLS - COMPONENT_FADE_START_CELLS);
   return 0.18 + smoothstep(t) * 0.82;
+}
+
+function computeOverlayAlpha(
+  timeS: number,
+  maxTimeS: number,
+  coverage: number
+): number {
+  const coverageAlpha = DEFAULT_ALPHA * Math.pow(coverage, 0.92);
+  const normalizedTime = clamp(timeS / Math.max(maxTimeS, 1), 0, 1);
+  const outerFade = 1 - 0.46 * smoothstep(Math.pow(normalizedTime, 0.84));
+  return clamp(coverageAlpha * outerFade, 0, 0.76);
 }
 
 function smoothstep(value: number): number {

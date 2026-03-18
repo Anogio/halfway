@@ -1,23 +1,23 @@
 .inspect-path-details {
   margin-top: 0;
-  border-top: 1px solid rgba(207, 191, 160, 0.55);
-  padding: 0.48rem 0.78rem 0.62rem;
-  max-height: 230px;
+  border-top: 1px solid rgba(207, 191, 160, 0.48);
+  padding: 0.42rem 0.68rem 0.56rem;
+  max-height: 218px;
   overflow: auto;
 }
 
 .inspect-path-details p {
-  margin: 0 0 0.3rem;
-  font-size: 0.77rem;
+  margin: 0 0 0.26rem;
+  font-size: 0.74rem;
 }
 
 .inspect-path-details ul {
   margin: 0.18rem 0 0 1rem;
   padding: 0;
   display: grid;
-  gap: 0.18rem;
-  font-size: 0.75rem;
-  line-height: 1.25;
+  gap: 0.16rem;
+  font-size: 0.73rem;
+  line-height: 1.22;
 }
 
 .origin-list {
@@ -26,22 +26,67 @@
   overflow: auto;
   padding-right: 0.12rem;
   display: grid;
-  gap: 0.58rem;
+  gap: 0.46rem;
 }
 
 .origin-item {
-  border: 1px solid rgba(31, 51, 71, 0.14);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid rgba(31, 51, 71, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.5);
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease,
+    transform 140ms ease;
+}
+
+.origin-item.is-expanded {
+  border-color: rgba(57, 105, 146, 0.2);
+  background: rgba(255, 255, 255, 0.66);
+  box-shadow: 0 8px 18px rgba(31, 51, 71, 0.06);
+}
+
+.origin-item.is-collapsed:hover {
+  border-color: rgba(57, 105, 146, 0.18);
+  background: rgba(255, 255, 255, 0.58);
 }
 
 .origin-item-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 56px;
-  gap: 0.55rem;
-  padding: 0.68rem 0.72rem;
+  min-height: 50px;
+  gap: 0.42rem;
+  padding: 0.58rem 0.62rem;
+}
+
+.origin-summary-btn {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.origin-summary-btn:not(.is-static) {
+  cursor: pointer;
+}
+
+.origin-summary-btn:not(.is-static):hover .origin-item-title,
+.origin-summary-btn:not(.is-static):focus-visible .origin-item-title {
+  color: #183b59;
+}
+
+.origin-summary-btn:not(.is-static):focus-visible {
+  outline: 2px solid rgba(57, 105, 146, 0.28);
+  outline-offset: 3px;
 }
 
 .origin-item-summary {
@@ -58,7 +103,7 @@
 .origin-item-main {
   min-width: 0;
   display: grid;
-  gap: 0.18rem;
+  gap: 0.16rem;
 }
 
 .origin-swatch {
@@ -70,7 +115,7 @@
 }
 
 .origin-item-title {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -83,26 +128,37 @@
 .origin-item-travel-time {
   width: fit-content;
   max-width: 100%;
-  padding: 0.14rem 0.44rem;
+  padding: 0.12rem 0.4rem;
   border-radius: 999px;
-  background: rgba(32, 51, 71, 0.08);
+  background: rgba(32, 51, 71, 0.07);
   color: #425a71;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
+}
+
+.origin-chevron {
+  color: #5f7080;
+  font-size: 1rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.origin-chevron.expanded {
+  color: #365067;
 }
 
 .origin-remove-btn {
   border: 1px solid rgba(31, 51, 71, 0.12);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.74);
   color: #7a3940;
-  width: 34px;
-  min-width: 34px;
-  height: 34px;
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   font-weight: 700;
   transition:
     background-color 120ms ease,
