@@ -16,11 +16,13 @@ import {
 import { ORIGIN_SOURCE_ID, PATH_SOURCE_ID } from "@/components/heatmap/maplibreIds";
 import {
   createBaseMapStyle,
+  ensureHeatmapCanvasSourceAndLayer,
   ensureOverlaySourcesAndLayers,
-  updateIsochroneRasterSource,
+  refreshHeatmapCanvasSource,
   updateGeoJsonSource
 } from "@/components/heatmap/maplibreStyle";
-import { buildScalarRasterOverlay } from "@/components/heatmap/scalarGrid";
+import { buildScalarFieldTexture } from "@/components/heatmap/scalarGrid";
+import { createWebglHeatmapCanvasRenderer } from "@/components/heatmap/webglHeatmapCanvas";
 
 type UseMapLibreMapArgs = {
   locale: Locale;
@@ -68,6 +70,7 @@ export function useMapLibreMap({
   const isochronePopupRef = useRef<MapLibrePopup | null>(null);
   const isochronePopupTimeoutRef = useRef<number | null>(null);
   const isochroneTapPreviewActiveRef = useRef(false);
+  const heatmapRendererRef = useRef<ReturnType<typeof createWebglHeatmapCanvasRenderer> | null>(null);
   const defaultLat = defaultView?.[0] ?? null;
   const defaultLon = defaultView?.[1] ?? null;
   const defaultZoom = defaultView?.[2] ?? null;
@@ -171,7 +174,14 @@ export function useMapLibreMap({
             isochroneTapPreviewActiveRef
           );
         });
-        updateIsochroneRasterSource(map, buildScalarRasterOverlay(scalarGridRef.current));
+        const initialField = buildScalarFieldTexture(scalarGridRef.current);
+        const heatmapRenderer = createWebglHeatmapCanvasRenderer(initialField);
+        heatmapRendererRef.current = heatmapRenderer;
+        const initialBounds = heatmapRenderer.getBounds();
+        if (initialBounds) {
+          ensureHeatmapCanvasSourceAndLayer(map, heatmapRenderer.getCanvas(), initialBounds);
+          refreshHeatmapCanvasSource(map);
+        }
         updateGeoJsonSource(
           map,
           PATH_SOURCE_ID,
@@ -227,6 +237,8 @@ export function useMapLibreMap({
       inspectPopupRef.current = null;
       inspectMarkerRef.current?.remove();
       inspectMarkerRef.current = null;
+      heatmapRendererRef.current?.destroy();
+      heatmapRendererRef.current = null;
       mapInstanceRef.current?.remove();
       mapInstanceRef.current = null;
       maplibreRef.current = null;
@@ -259,10 +271,16 @@ export function useMapLibreMap({
 
   useEffect(() => {
     const map = mapInstanceRef.current;
-    if (!map) {
+    const renderer = heatmapRendererRef.current;
+    if (!map || !renderer) {
       return;
     }
-    updateIsochroneRasterSource(map, buildScalarRasterOverlay(scalarGrid));
+    renderer.setField(buildScalarFieldTexture(scalarGrid));
+    const bounds = renderer.getBounds();
+    if (bounds) {
+      ensureHeatmapCanvasSourceAndLayer(map, renderer.getCanvas(), bounds);
+      refreshHeatmapCanvasSource(map);
+    }
   }, [scalarGrid]);
 
   useEffect(() => {

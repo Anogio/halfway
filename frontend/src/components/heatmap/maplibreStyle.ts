@@ -94,6 +94,68 @@ export function ensureOverlaySourcesAndLayers(map: MapLibreMap) {
   }
 }
 
+export function ensureHeatmapCanvasSourceAndLayer(
+  map: MapLibreMap,
+  canvas: HTMLCanvasElement,
+  bounds: { west: number; east: number; south: number; north: number }
+) {
+  const coordinates: [[number, number], [number, number], [number, number], [number, number]] = [
+    [bounds.west, bounds.north],
+    [bounds.east, bounds.north],
+    [bounds.east, bounds.south],
+    [bounds.west, bounds.south]
+  ];
+
+  const existingSource = map.getSource(ISOCHRONE_RASTER_SOURCE_ID) as
+    | {
+        setCoordinates?: (coords: typeof coordinates) => void;
+        play?: () => void;
+      }
+    | undefined;
+
+  if (!existingSource) {
+    map.addSource(ISOCHRONE_RASTER_SOURCE_ID, {
+      type: "canvas",
+      canvas,
+      animate: false,
+      coordinates
+    });
+  } else {
+    existingSource.setCoordinates?.(coordinates);
+  }
+
+  if (!map.getLayer(ISOCHRONE_RASTER_LAYER_ID)) {
+    map.addLayer(
+      {
+        id: ISOCHRONE_RASTER_LAYER_ID,
+        type: "raster",
+        source: ISOCHRONE_RASTER_SOURCE_ID,
+        paint: {
+          "raster-opacity": 1,
+          "raster-resampling": "linear",
+          "raster-fade-duration": 0
+        }
+      },
+      findHeatmapInsertBeforeLayerId(map)
+    );
+  }
+}
+
+export function refreshHeatmapCanvasSource(map: MapLibreMap) {
+  const source = map.getSource(ISOCHRONE_RASTER_SOURCE_ID) as
+    | {
+        play?: () => void;
+        pause?: () => void;
+      }
+    | undefined;
+  if (!source?.play || !source.pause) {
+    return;
+  }
+  source.play();
+  source.pause();
+  map.triggerRepaint();
+}
+
 function buildLocalizedBaseMapStyle(locale: Locale): StyleSpecification {
   const style = structuredClone(BASE_LIBERTY_STYLE);
   style.layers = (style.layers ?? []).map((layer) => {
@@ -305,53 +367,7 @@ export function updateGeoJsonSource(map: MapLibreMap, sourceId: string, data: Fe
   source.setData(data);
 }
 
-type RasterOverlay = {
-  imageUrl: string;
-  coordinates: [[number, number], [number, number], [number, number], [number, number]];
-};
-
-function findHeatmapInsertBeforeLayerId(map: MapLibreMap): string | undefined {
+export function findHeatmapInsertBeforeLayerId(map: MapLibreMap): string | undefined {
   const layers = map.getStyle()?.layers ?? [];
   return layers.find((layer) => layer.type === "symbol")?.id;
-}
-
-export function updateIsochroneRasterSource(map: MapLibreMap, overlay: RasterOverlay | null) {
-  const existingLayer = map.getLayer(ISOCHRONE_RASTER_LAYER_ID);
-  const existingSource = map.getSource(ISOCHRONE_RASTER_SOURCE_ID) as
-    | { updateImage?: (options: { url: string; coordinates: RasterOverlay["coordinates"] }) => void }
-    | undefined;
-
-  if (!overlay) {
-    if (existingLayer) {
-      map.removeLayer(ISOCHRONE_RASTER_LAYER_ID);
-    }
-    if (existingSource) {
-      map.removeSource(ISOCHRONE_RASTER_SOURCE_ID);
-    }
-    return;
-  }
-
-  if (!existingSource) {
-    map.addSource(ISOCHRONE_RASTER_SOURCE_ID, {
-      type: "image",
-      url: overlay.imageUrl,
-      coordinates: overlay.coordinates
-    });
-  } else {
-    existingSource.updateImage?.({
-      url: overlay.imageUrl,
-      coordinates: overlay.coordinates
-    });
-  }
-
-  if (!map.getLayer(ISOCHRONE_RASTER_LAYER_ID)) {
-    map.addLayer({
-      id: ISOCHRONE_RASTER_LAYER_ID,
-      type: "raster",
-      source: ISOCHRONE_RASTER_SOURCE_ID,
-      paint: {
-        "raster-opacity": 1
-      }
-    }, findHeatmapInsertBeforeLayerId(map));
-  }
 }
